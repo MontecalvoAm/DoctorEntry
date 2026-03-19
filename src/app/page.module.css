@@ -1,0 +1,37 @@
+.page {
+  position: relative;
+  min-height: calc(100vh - var(--header-height));
+  display: flex;
+  flex-direction: column;
+}
+
+.backgroundOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url('/hospital-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  backdrop-filter: blur(3px); /* Added slight blur to background for better form focus */
+  overflow: hidden;
+}
+
+.footer {
+  margin-top: auto;
+  padding: 15px 0;
+  background: var(--white);
+  border-top: 1px solid #eee;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+@media (max-width: 600px) {
+  .footer {
+    padding: 24px 0;
+  }
+}
