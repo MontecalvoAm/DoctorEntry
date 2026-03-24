@@ -1,3 +1,8 @@
+.modalWrapper {
+  position: relative;
+  width: 100%;
+}
+
 .userForm {
   display: flex;
   flex-direction: column;
@@ -6,19 +11,22 @@
 
 .passwordRow {
   display: flex;
+  flex-direction: row;
   gap: 1rem;
   width: 100%;
+  align-items: flex-start;
 }
 
-@media (max-width: 640px) {
+.passwordRow>.formGroup {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 540px) {
   .passwordRow {
     flex-direction: column;
     gap: 1.25rem;
   }
-}
-
-.passwordRow > div {
-  flex: 1;
 }
 
 .formGroup {

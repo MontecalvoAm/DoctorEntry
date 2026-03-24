@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Header from "@/components/Header/Header";
+import { AuthProvider } from "@/context/AuthContext";
+import { CaptchaProvider } from "@/context/CaptchaContext";
 
 export const metadata: Metadata = {
   title: "VisayasMed Hospital | Doctor Data Entry",
@@ -18,7 +19,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <main>{children}</main>
+        <AuthProvider>
+          <CaptchaProvider>
+            <main>{children}</main>
+          </CaptchaProvider>
+        </AuthProvider>
       </body>
     </html>
   );

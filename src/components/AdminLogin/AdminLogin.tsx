@@ -2,60 +2,65 @@
 
 import React, { useState } from 'react';
 import { auth, getCollectionData } from '@/lib/firebase';
-import bcrypt from 'bcryptjs';
 import { Eye, EyeOff } from 'lucide-react';
 import styles from './AdminLogin.module.css';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import StatusModal from '../Shared/StatusModal';
+import LoadingSpinner from '../Shared/LoadingSpinner';
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // Status Modal State
+  const [statusModal, setStatusModal] = useState({
+    isOpen: false,
+    type: 'error' as 'success' | 'error',
+    title: '',
+    message: ''
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
     const trimmedEmail = email.trim().toLowerCase();
     const trimmedPassword = password.trim();
     setLoading(true);
 
     try {
-      // Manual Firestore check as requested
-      const result = await getCollectionData('M_Users');
-      
-      if (result.success) {
-        const users = result.data as any[];
-        const user = users.find(u => {
-          if (!u.Email || u.Email.trim().toLowerCase() !== trimmedEmail) return false;
-          
-          // Check if password matches (handling both plaintext for legacy and hashed)
-          try {
-            return bcrypt.compareSync(trimmedPassword, u.Password) || u.Password === trimmedPassword;
-          } catch (e) {
-            return u.Password === trimmedPassword;
-          }
-        });
-        
-        if (user) {
-          // Success - Set session in localStorage
-          localStorage.setItem('admin_session', JSON.stringify({
-            userId: user.id,
-            email: user.Email,
-            userName: user.UserName,
-            role: user.Role || 'Administrator',
-            timestamp: new Date().getTime()
-          }));
-          window.location.href = '/dashboard';
-        } else {
-          setError('Invalid email or password. Please try again.');
-        }
-      } else {
-        setError('Failed to connect to the database.');
-      }
+      // Use Firebase Auth instead of manual Firestore check
+      const userCredential = await signInWithEmailAndPassword(auth, trimmedEmail, trimmedPassword);
+
+      // Success - Firebase Auth maintains the session
+      // Also set the server-side session cookie for middleware protection
+      const idToken = await userCredential.user.getIdToken();
+      await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idToken })
+      });
+
+      window.location.href = '/dashboard';
     } catch (err: any) {
       console.error(err);
-      setError('An unexpected error occurred.');
+      let errorMessage = 'An unexpected error occurred. Please try again later.';
+      let errorTitle = 'Login Failed';
+
+      if (err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
+        errorMessage = 'Invalid email or password. Please check your credentials and try again.';
+      } else if (err.code === 'auth/too-many-requests') {
+        errorMessage = 'Too many failed login attempts. Please try again later.';
+        errorTitle = 'Account Locked';
+      }
+
+      setStatusModal({
+        isOpen: true,
+        type: 'error',
+        title: errorTitle,
+        message: errorMessage
+      });
     } finally {
       setLoading(false);
     }
@@ -63,10 +68,38 @@ const AdminLogin = () => {
 
   return (
     <div className={styles.loginContainer}>
+      {loading && <LoadingSpinner fullPage message="Authenticating credentials..." />}
+
+      <StatusModal
+        isOpen={statusModal.isOpen}
+        onClose={() => setStatusModal(prev => ({ ...prev, isOpen: false }))}
+        type={statusModal.type}
+        title={statusModal.title}
+        message={statusModal.message}
+      />
+
       <div className={styles.backgroundOverlay}></div>
       <div className={styles.loginCard}>
-        <h2>Login</h2>
-        {error && <div className={styles.error}>{error}</div>}
+        <div className={styles.loginHeader}>
+          <div className={styles.logoWrapper}>
+            <img
+              src="/Visayas Medical.png"
+              alt="VisayasMed Logo"
+              className={styles.brandLogo}
+              width={100}
+              height={100}
+            />
+          </div>
+          <div className={styles.brandInfo}>
+            <h1 className={styles.brandName}>VISAYASMED HOSPITAL</h1>
+            <span className={styles.groupAffiliation}>A MEMBER OF APPLEONE MEDICAL GROUP</span>
+            <div className={styles.contactDetails}>
+              <p>85 Osmeña Blvd., Brgy. Sta. Cruz, Cebu City, Philippines 6000</p>
+              <p>Tel: (032) 253 1901 • www.visayasmedcebu.com.ph</p>
+            </div>
+          </div>
+        </div>
+
         <form onSubmit={handleSubmit}>
           <div className={styles.formGroup}>
             <label htmlFor="email">EMAIL ADDRESS</label>
@@ -102,10 +135,37 @@ const AdminLogin = () => {
               </button>
             </div>
           </div>
+          <div className={styles.optionsRow}>
+            <label className={styles.rememberMe}>
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+              />
+              Remember Me
+            </label>
+            <a href="#" className={styles.forgotPassword} onClick={(e) => {
+              e.preventDefault();
+              setStatusModal({
+                isOpen: true,
+                type: 'error',
+                title: 'Password Reset',
+                message: 'Please contact your system administrator to reset your password.'
+              });
+            }}>
+              Forgot Password?
+            </a>
+          </div>
           <button type="submit" className={styles.loginBtn} disabled={loading} suppressHydrationWarning>
             {loading ? 'Authenticating...' : 'Sign In'}
           </button>
         </form>
+        <div className={styles.registerPrompt}>
+          Don't have an account yet?
+          <span className={styles.adminContact}>
+            Please contact VisayasMed Hospital Administrator
+          </span>
+        </div>
       </div>
     </div>
   );

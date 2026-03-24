@@ -4,6 +4,9 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import styles from './DataEntryForm.module.css';
 import { saveFormData, updateFormData, checkDuplicate } from '@/lib/firebase';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
+import StatusModal from '../Shared/StatusModal';
+import LoadingSpinner from '../Shared/LoadingSpinner';
 
 interface DataEntryFormProps {
   isModal?: boolean;
@@ -14,14 +17,15 @@ interface DataEntryFormProps {
   currentUserEmail?: string;
 }
 
-const DataEntryForm: React.FC<DataEntryFormProps> = ({ 
-  isModal = false, 
-  onSuccess, 
+const DataEntryForm: React.FC<DataEntryFormProps> = ({
+  isModal = false,
+  onSuccess,
   onCancel,
   mode = 'create',
   initialData,
   currentUserEmail = 'System'
 }) => {
+  const { executeRecaptcha } = useGoogleReCaptcha();
   const [formData, setFormData] = useState({
     surname: initialData?.surname || '',
     givenName: initialData?.givenName || '',
@@ -35,10 +39,17 @@ const DataEntryForm: React.FC<DataEntryFormProps> = ({
     privacyAccepted: mode !== 'create', // Assume accepted if editing/viewing
   });
 
-  const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
   const [fieldErrors, setFieldErrors] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(false);
+
+  // Status Modal State
+  const [statusModal, setStatusModal] = useState({
+    isOpen: false,
+    type: 'success' as 'success' | 'error',
+    title: '',
+    message: ''
+  });
 
   const formatBirTan = (val: string) => {
     // Remove all non-digits
@@ -50,7 +61,7 @@ const DataEntryForm: React.FC<DataEntryFormProps> = ({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
-    
+
     // Clear field error when user starts typing
     if (fieldErrors[name]) {
       setFieldErrors(prev => {
@@ -75,8 +86,8 @@ const DataEntryForm: React.FC<DataEntryFormProps> = ({
 
   const validateForm = () => {
     const errors: Record<string, boolean> = {};
-    const requiredFields = ['surname', 'givenName', 'specialty', 'phicNo', 'birTan', 'contactNo', 'email'];
-    
+    const requiredFields = ['surname', 'givenName', 'specialty', 'contactNo', 'email'];
+
     requiredFields.forEach(field => {
       if (!formData[field as keyof typeof formData]) {
         errors[field] = true;
@@ -91,60 +102,108 @@ const DataEntryForm: React.FC<DataEntryFormProps> = ({
     e.preventDefault();
 
     if (!validateForm()) {
-      setError('Please fill in all required fields.');
+      setStatusModal({
+        isOpen: true,
+        type: 'error',
+        title: 'Validation Error',
+        message: 'Please fill in all required fields.'
+      });
       return;
     }
 
-    setError('');
     setLoading(true);
 
     try {
       // Check for duplicates
       const excludeId = mode === 'edit' ? initialData?.id : undefined;
-      
+
       const isEmailDuplicate = await checkDuplicate('doctors', 'email', formData.email, excludeId);
       if (isEmailDuplicate) {
-        setError('A physician with this email address is already registered.');
+        setStatusModal({
+          isOpen: true,
+          type: 'error',
+          title: 'Duplicate Entry',
+          message: 'A physician with this email address is already registered.'
+        });
         setLoading(false);
         return;
       }
 
-      const isPhicDuplicate = await checkDuplicate('doctors', 'phicNo', formData.phicNo, excludeId);
-      if (isPhicDuplicate) {
-        setError('A physician with this PHIC(PMA) NO. is already registered.');
-        setLoading(false);
-        return;
+      if (formData.phicNo) {
+        const isPhicDuplicate = await checkDuplicate('doctors', 'phicNo', formData.phicNo, excludeId);
+        if (isPhicDuplicate) {
+          setStatusModal({
+            isOpen: true,
+            type: 'error',
+            title: 'Duplicate Entry',
+            message: 'A physician with this PHIC(PMA) NO. is already registered.'
+          });
+          setLoading(false);
+          return;
+        }
       }
 
-      const isBirDuplicate = await checkDuplicate('doctors', 'birTan', formData.birTan, excludeId);
-      if (isBirDuplicate) {
-        setError('A physician with this BIR-TAN # is already registered.');
-        setLoading(false);
-        return;
+      if (formData.birTan) {
+        const isBirDuplicate = await checkDuplicate('doctors', 'birTan', formData.birTan, excludeId);
+        if (isBirDuplicate) {
+          setStatusModal({
+            isOpen: true,
+            type: 'error',
+            title: 'Duplicate Entry',
+            message: 'A physician with this BIR-TAN # is already registered.'
+          });
+          setLoading(false);
+          return;
+        }
       }
 
       let result;
       if (mode === 'edit' && initialData?.id) {
         result = await updateFormData('doctors', initialData.id, formData, currentUserEmail);
       } else {
-        // Add creation source
-        const dataToSave = {
-          ...formData,
-          CreatedFrom: isModal ? 'Manual Creation' : 'Form'
-        };
-        result = await saveFormData('doctors', dataToSave, currentUserEmail);
-      }
-      
-      if (result.success) {
-        setSubmitted(true);
-        if (onSuccess) {
-          setTimeout(() => {
-            onSuccess();
-          }, 2000); // Give user a moment to see success state
+        // Generate reCAPTCHA token (A04)
+        if (!executeRecaptcha) {
+          setStatusModal({
+            isOpen: true,
+            type: 'error',
+            title: 'System Error',
+            message: 'reCAPTCHA not initialized. Please refresh the page.'
+          });
+          setLoading(false);
+          return;
         }
-        
+        const captchaToken = await executeRecaptcha('register_doctor');
+
+        // Use the new secure API for registration (A01, A03, A09, A04)
+        const response = await fetch('/api/doctors', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ...formData,
+            CreatedFrom: isModal ? 'Manual Creation' : 'Form',
+            captchaToken // Sent to server for verification
+          })
+        });
+        result = await response.json();
+      }
+
+      if (result.success) {
+        setStatusModal({
+          isOpen: true,
+          type: 'success',
+          title: mode === 'edit' ? 'Updated Successfully' : 'Registration Complete',
+          message: mode === 'edit'
+            ? `Physician details for Dr. ${formData.surname} have been updated.`
+            : `Thank you, Dr. ${formData.surname}. Your information has been securely transmitted and is being processed.`
+        });
+
+        if (onSuccess) {
+          // Wait for modal to be acknowledged by user before closing parent
+          // Actually, we'll let the user close the status modal.
+        }
+
         if (mode === 'create') {
-          // Clear form after success only on create
+          // Clear form after success
           setFormData({
             surname: '',
             givenName: '',
@@ -160,35 +219,37 @@ const DataEntryForm: React.FC<DataEntryFormProps> = ({
           setFieldErrors({});
         }
       } else {
-        const errorMessage = (result.error as any)?.code === 'permission-denied'
-          ? 'Firestore permission denied. Please check your security rules in the Firebase Console.'
-          : `Failed to ${mode === 'edit' ? 'update' : 'submit'} form. Please try again later.`;
-        setError(errorMessage);
+        const errorMessage = result.error ||
+          ((result.error as any)?.code === 'permission-denied'
+            ? 'Firestore permission denied. Please check your security rules.'
+            : `Failed to ${mode === 'edit' ? 'update' : 'submit'} form. Please try again later.`);
+
+        setStatusModal({
+          isOpen: true,
+          type: 'error',
+          title: 'Submission Failed',
+          message: errorMessage
+        });
       }
     } catch (err) {
       console.error('Submission error:', err);
-      setError('An unexpected error occurred. Please try again.');
+      setStatusModal({
+        isOpen: true,
+        type: 'error',
+        title: 'Unexpected Error',
+        message: 'An unexpected error occurred. Please try again later.'
+      });
     } finally {
       setLoading(false);
     }
   };
 
-  if (submitted) {
-    return (
-      <div className={styles.successContainer}>
-        <div className={styles.successIcon}>
-          <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="40" cy="40" r="38" stroke="var(--accent-green)" strokeWidth="4" />
-            <path d="M24 40L34 50L56 28" stroke="var(--accent-green)" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M30 65C30 65 35 60 40 60C45 60 50 65 50 65" stroke="var(--neutral-grey)" strokeWidth="2" strokeLinecap="round" opacity="0.3" />
-          </svg>
-        </div>
-        <h2>Submission Received!</h2>
-        <p>Thank you, Dr. {formData.surname}. Your information has been securely transmitted and is being processed by the VisayasMed Administration.</p>
-        <button onClick={() => setSubmitted(false)} className={styles.resetButton}>Submit Another Entry</button>
-      </div>
-    );
-  }
+  const handleCloseStatusModal = () => {
+    setStatusModal(prev => ({ ...prev, isOpen: false }));
+    if (statusModal.type === 'success' && onSuccess) {
+      onSuccess();
+    }
+  };
 
   const formatFullDate = (timestamp: any) => {
     if (!timestamp) return 'N/A';
@@ -204,14 +265,25 @@ const DataEntryForm: React.FC<DataEntryFormProps> = ({
 
   return (
     <div className={`${styles.formWrapper} ${isModal ? styles.modalMode : ''}`}>
+      {loading && <LoadingSpinner fullPage message={mode === 'edit' ? 'Updating details...' : 'Submitting registration...'} />}
+
+      <StatusModal
+        isOpen={statusModal.isOpen}
+        onClose={handleCloseStatusModal}
+        type={statusModal.type}
+        title={statusModal.title}
+        message={statusModal.message}
+        buttonText="Return"
+      />
+
       {!isModal && (
         <div className={styles.formHeader}>
           <div className={styles.logoContainer}>
-            <Image 
-              src="/Visayas Medical.png" 
-              alt="VisayasMed Hospital Logo" 
-              width={65} 
-              height={65} 
+            <Image
+              src="/Visayas Medical.png"
+              alt="VisayasMed Hospital Logo"
+              width={65}
+              height={65}
               className={styles.hospitalLogo}
               priority
             />
@@ -228,7 +300,7 @@ const DataEntryForm: React.FC<DataEntryFormProps> = ({
         <div className={styles.sectionHeader}>Personal Information</div>
         <div className={styles.row}>
           <div className={styles.field}>
-            <label htmlFor="surname">SURNAME</label>
+            <label htmlFor="surname">SURNAME<span className={styles.required}>*</span></label>
             <input
               type="text"
               id="surname"
@@ -243,7 +315,7 @@ const DataEntryForm: React.FC<DataEntryFormProps> = ({
             {fieldErrors.surname && <span className={styles.fieldErrorMessage}>This is a required field</span>}
           </div>
           <div className={styles.field}>
-            <label htmlFor="givenName">GIVEN NAME</label>
+            <label htmlFor="givenName">GIVEN NAME<span className={styles.required}>*</span></label>
             <input
               type="text"
               id="givenName"
@@ -275,7 +347,7 @@ const DataEntryForm: React.FC<DataEntryFormProps> = ({
         <div className={styles.sectionHeader}>Professional Details</div>
         <div className={styles.row}>
           <div className={styles.field}>
-            <label htmlFor="specialty">SPECIALTY</label>
+            <label htmlFor="specialty">SPECIALTY<span className={styles.required}>*</span></label>
             <input
               type="text"
               id="specialty"
@@ -341,7 +413,7 @@ const DataEntryForm: React.FC<DataEntryFormProps> = ({
         <div className={styles.sectionHeader}>Contact Information</div>
         <div className={styles.row}>
           <div className={styles.field}>
-            <label htmlFor="contactNo">CONTACT NUMBER</label>
+            <label htmlFor="contactNo">CONTACT NUMBER<span className={styles.required}>*</span></label>
             <input
               type="tel"
               id="contactNo"
@@ -356,7 +428,7 @@ const DataEntryForm: React.FC<DataEntryFormProps> = ({
             {fieldErrors.contactNo && <span className={styles.fieldErrorMessage}>This is a required field</span>}
           </div>
           <div className={styles.field}>
-            <label htmlFor="email">EMAIL ADDRESS</label>
+            <label htmlFor="email">EMAIL ADDRESS<span className={styles.required}>*</span></label>
             <input
               type="email"
               id="email"
@@ -386,7 +458,6 @@ const DataEntryForm: React.FC<DataEntryFormProps> = ({
               I hereby acknowledge that I have read and understood the <strong>Data Privacy Act of 2012</strong> and consent to the collection and processing of my personal data for VisayasMed Hospital's record-keeping purposes.
             </span>
           </label>
-          {error && <div className={styles.errorMessage}>{error}</div>}
         </div>
 
         <div className={styles.submitRow}>

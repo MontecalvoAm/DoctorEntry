@@ -1,6 +1,6 @@
 .page {
   position: relative;
-  min-height: calc(100vh - var(--header-height));
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
@@ -16,7 +16,8 @@
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-  backdrop-filter: blur(3px); /* Added slight blur to background for better form focus */
+  backdrop-filter: blur(3px);
+  /* Added slight blur to background for better form focus */
   overflow: hidden;
 }
 

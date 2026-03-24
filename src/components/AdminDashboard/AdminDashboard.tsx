@@ -2,6 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 import { auth, getCollectionData } from '@/lib/firebase';
+import { useAuth } from '@/context/AuthContext';
+import { signOut } from 'firebase/auth';
 import styles from './AdminDashboard.module.css';
 import {
   Users,
@@ -28,6 +30,8 @@ import Modal from '../Shared/Modal';
 import UserModal from './UserModal';
 import DataEntryForm from '../DataEntryForm/DataEntryForm';
 import { updateFormData } from '@/lib/firebase';
+import StatusModal from '../Shared/StatusModal';
+import LoadingSpinner from '../Shared/LoadingSpinner';
 
 interface Doctor {
   id: string;
@@ -64,6 +68,8 @@ interface User {
 }
 
 const AdminDashboard = () => {
+  console.log('AdminDashboard rendered');
+  const { user, loading: authLoading, isAdministrator } = useAuth();
   const [activeTab, setActiveTab] = useState<'doctors' | 'users'>('doctors');
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [users, setUsers] = useState<User[]>([]);
@@ -76,7 +82,7 @@ const AdminDashboard = () => {
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
   const [isDoctorModalOpen, setIsDoctorModalOpen] = useState(false);
-  
+
   // New state for actions
   const [selectedItem, setSelectedItem] = useState<any>(null);
   const [modalMode, setModalMode] = useState<'create' | 'edit' | 'view'>('create');
@@ -90,12 +96,25 @@ const AdminDashboard = () => {
   const [statusFilter, setStatusFilter] = useState('');
   const [roleFilter, setRoleFilter] = useState('');
 
+  // Status Modal State
+  const [statusModal, setStatusModal] = useState({
+    isOpen: false,
+    type: 'success' as 'success' | 'error',
+    title: '',
+    message: ''
+  });
+
   const handleAddNew = () => {
     setSelectedItem(null);
     setModalMode('create');
     if (activeTab === 'doctors') {
       setIsDoctorModalOpen(true);
     } else {
+      // Robust check even if UI is reached
+      if (!isAdministrator) {
+        setError('You do not have permission to add users.');
+        return;
+      }
       setIsUserModalOpen(true);
     }
   };
@@ -132,21 +151,66 @@ const AdminDashboard = () => {
 
   const handleDelete = async () => {
     if (!selectedItem) return;
-    
+
     setIsProcessing(true);
     try {
-      const collectionName = activeTab === 'doctors' ? 'doctors' : 'M_Users';
-      const result = await updateFormData(collectionName, selectedItem.id, { IsActive: false }, currentUser?.userName || currentUser?.email || 'System');
-      
-      if (result.success) {
-        setIsDeleteModalOpen(false);
-        fetchData(); // Refresh data
+      if (activeTab === 'doctors') {
+        const result = await updateFormData('doctors', selectedItem.id, { IsActive: false }, user?.displayName || user?.email || 'System');
+        if (result.success) {
+          setIsDeleteModalOpen(false);
+          setStatusModal({
+            isOpen: true,
+            type: 'success',
+            title: 'Deactivated',
+            message: `Physician ${selectedItem.surname} has been deactivated successfully.`
+          });
+          fetchData();
+        } else {
+          setStatusModal({
+            isOpen: true,
+            type: 'error',
+            title: 'Action Failed',
+            message: 'Failed to deactivate doctor.'
+          });
+        }
       } else {
-        setError('Failed to deactivate record.');
+        // Use API for users
+        const token = await auth.currentUser?.getIdToken();
+        const response = await fetch('/api/users', {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ uid: selectedItem.uid || selectedItem.id, IsActive: false })
+        });
+        const result = await response.json();
+        if (result.success) {
+          setIsDeleteModalOpen(false);
+          setStatusModal({
+            isOpen: true,
+            type: 'success',
+            title: 'User Deactivated',
+            message: `System user ${selectedItem.UserName} has been deactivated.`
+          });
+          fetchData();
+        } else {
+          setStatusModal({
+            isOpen: true,
+            type: 'error',
+            title: 'Action Failed',
+            message: result.error || 'Failed to deactivate user.'
+          });
+        }
       }
     } catch (err) {
       console.error(err);
-      setError('An error occurred during deactivation.');
+      setStatusModal({
+        isOpen: true,
+        type: 'error',
+        title: 'Error',
+        message: 'An error occurred during deactivation.'
+      });
     } finally {
       setIsProcessing(false);
       setSelectedItem(null);
@@ -155,21 +219,66 @@ const AdminDashboard = () => {
 
   const handleRestore = async () => {
     if (!selectedItem) return;
-    
+
     setIsProcessing(true);
     try {
-      const collectionName = activeTab === 'doctors' ? 'doctors' : 'M_Users';
-      const result = await updateFormData(collectionName, selectedItem.id, { IsActive: true }, currentUser?.userName || currentUser?.email || 'System');
-      
-      if (result.success) {
-        setIsRestoreModalOpen(false);
-        fetchData(); // Refresh data
+      if (activeTab === 'doctors') {
+        const result = await updateFormData('doctors', selectedItem.id, { IsActive: true }, user?.displayName || user?.email || 'System');
+        if (result.success) {
+          setIsRestoreModalOpen(false);
+          setStatusModal({
+            isOpen: true,
+            type: 'success',
+            title: 'Restored',
+            message: `Physician ${selectedItem.surname} has been restored successfully.`
+          });
+          fetchData();
+        } else {
+          setStatusModal({
+            isOpen: true,
+            type: 'error',
+            title: 'Action Failed',
+            message: 'Failed to restore doctor.'
+          });
+        }
       } else {
-        setError('Failed to restore record.');
+        // Use API for users
+        const token = await auth.currentUser?.getIdToken();
+        const response = await fetch('/api/users', {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ uid: selectedItem.uid || selectedItem.id, IsActive: true })
+        });
+        const result = await response.json();
+        if (result.success) {
+          setIsRestoreModalOpen(false);
+          setStatusModal({
+            isOpen: true,
+            type: 'success',
+            title: 'User Restored',
+            message: `System user ${selectedItem.UserName} has been restored.`
+          });
+          fetchData();
+        } else {
+          setStatusModal({
+            isOpen: true,
+            type: 'error',
+            title: 'Action Failed',
+            message: result.error || 'Failed to restore user.'
+          });
+        }
       }
     } catch (err) {
       console.error(err);
-      setError('An error occurred during restoration.');
+      setStatusModal({
+        isOpen: true,
+        type: 'error',
+        title: 'Error',
+        message: 'An error occurred during restoration.'
+      });
     } finally {
       setIsProcessing(false);
       setSelectedItem(null);
@@ -177,20 +286,10 @@ const AdminDashboard = () => {
   };
 
   useEffect(() => {
-    const sessionStr = localStorage.getItem('admin_session');
-    if (sessionStr) {
-      try {
-        const session = JSON.parse(sessionStr);
-        setCurrentUser(session);
-        fetchData();
-      } catch (e) {
-        localStorage.removeItem('admin_session');
-        window.location.href = '/login';
-      }
-    } else {
-      window.location.href = '/login';
+    if (!authLoading && user) {
+      fetchData();
     }
-  }, [activeTab]);
+  }, [authLoading, user, activeTab]);
 
   // Reset filters when changing tabs
   useEffect(() => {
@@ -206,33 +305,65 @@ const AdminDashboard = () => {
   }, [searchQuery]);
 
   const fetchData = async () => {
+    if (!user) return;
     setLoading(true);
     setError('');
 
     try {
-      const collectionName = activeTab === 'doctors' ? 'doctors' : 'M_Users';
-      const result = await getCollectionData(collectionName);
-
-      if (result.success) {
-        if (activeTab === 'doctors') {
+      if (activeTab === 'doctors') {
+        const result = await getCollectionData('doctors');
+        if (result.success) {
           setDoctors(result.data as Doctor[]);
         } else {
-          setUsers(result.data as User[]);
+          setStatusModal({
+            isOpen: true,
+            type: 'error',
+            title: 'Data Error',
+            message: 'Failed to fetch physicians list.'
+          });
         }
       } else {
-        setError('Failed to fetch data. Please check your connection.');
+        // Use API for users to avoid exposing password hashes
+        const token = await auth.currentUser?.getIdToken();
+        const response = await fetch('/api/users', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        const result = await response.json();
+        if (result.success) {
+          setUsers(result.data as User[]);
+        } else {
+          setStatusModal({
+            isOpen: true,
+            type: 'error',
+            title: 'Data Error',
+            message: result.error || 'Failed to fetch users list.'
+          });
+        }
       }
     } catch (err) {
       console.error(err);
-      setError('An unexpected error occurred.');
+      setStatusModal({
+        isOpen: true,
+        type: 'error',
+        title: 'Unexpected Error',
+        message: 'An unexpected error occurred while fetching data.'
+      });
     } finally {
       setLoading(false);
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('admin_session');
-    window.location.href = '/login';
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      // Also clear the server-side session cookie
+      await fetch('/api/auth/logout', { method: 'POST' });
+      window.location.href = '/login';
+    } catch (err) {
+      console.error('Logout failed:', err);
+    }
   };
 
   const handleExportExcel = async () => {
@@ -343,7 +474,7 @@ const AdminDashboard = () => {
               bottom: { style: 'thin', color: { argb: 'FFE2E8F0' } },
               right: { style: 'thin', color: { argb: 'FFE2E8F0' } }
             };
-            
+
             if (rowNumber % 2 === 0) {
               cell.fill = {
                 type: 'pattern',
@@ -376,7 +507,12 @@ const AdminDashboard = () => {
       window.URL.revokeObjectURL(url);
     } catch (err) {
       console.error('Export failed:', err);
-      setError('Failed to generate Excel file.');
+      setStatusModal({
+        isOpen: true,
+        type: 'error',
+        title: 'Export Failed',
+        message: 'Failed to generate Excel file. Please try again.'
+      });
     }
   };
 
@@ -396,15 +532,15 @@ const AdminDashboard = () => {
   const roles = ['Administrator', 'Staff', 'Doctor (Access)'];
 
   const filteredDoctors = doctors.filter(doc => {
-    const matchesSearch = searchQuery === '' || 
+    const matchesSearch = searchQuery === '' ||
       `${doc.givenName} ${doc.surname}`.toLowerCase().includes(searchQuery.toLowerCase()) ||
       doc.specialty.toLowerCase().includes(searchQuery.toLowerCase()) ||
       doc.email.toLowerCase().includes(searchQuery.toLowerCase());
-    
+
     const matchesDept = !deptFilter || doc.department === deptFilter;
     const matchesSpec = !specFilter || doc.specialty === specFilter;
     const matchesStatus = !statusFilter || (statusFilter === 'Active' ? doc.IsActive !== false : doc.IsActive === false);
-    
+
     return (matchesSearch && matchesDept && matchesSpec && matchesStatus);
   }).sort((a, b) => {
     if (a.IsActive === b.IsActive) return 0;
@@ -416,10 +552,10 @@ const AdminDashboard = () => {
       user.UserName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       user.Email.toLowerCase().includes(searchQuery.toLowerCase()) ||
       user.Role.toLowerCase().includes(searchQuery.toLowerCase());
-    
+
     const matchesRole = !roleFilter || user.Role === roleFilter;
     const matchesStatus = !statusFilter || (statusFilter === 'Active' ? user.IsActive !== false : user.IsActive === false);
-    
+
     return (matchesSearch && matchesRole && matchesStatus);
   }).sort((a, b) => {
     if (a.IsActive === b.IsActive) return 0;
@@ -508,14 +644,44 @@ const AdminDashboard = () => {
     ? doctors.filter(doc => doc.IsActive === false).length
     : users.filter(user => user.IsActive === false).length;
 
+  if (authLoading) {
+    return <LoadingSpinner fullPage message="Verifying authentication..." />;
+  }
+
+  if (!user) {
+    return (
+      <div className={styles.loadingWrapper}>
+        <AlertCircle size={48} color="#ef4444" />
+        <p style={{ marginTop: '1rem' }}>Session not synchronized on client.</p>
+        <button
+          onClick={handleLogout}
+          className={styles.loginBtn}
+          style={{ marginTop: '1rem', padding: '0.5rem 1rem', background: '#3b82f6', color: 'white', borderRadius: '4px', border: 'none', cursor: 'pointer' }}
+        >
+          Clear Session & Return to Login
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.dashboardWrapper}>
+      {isProcessing && <LoadingSpinner fullPage message="Processing action..." />}
+
+      <StatusModal
+        isOpen={statusModal.isOpen}
+        onClose={() => setStatusModal(prev => ({ ...prev, isOpen: false }))}
+        type={statusModal.type}
+        title={statusModal.title}
+        message={statusModal.message}
+      />
+
       {/* Sidebar */}
       <aside className={`${styles.sidebar} ${isMobileMenuOpen ? styles.mobileOpen : ''}`}>
         <div className={styles.sidebarLogo}>
-          <img 
-            src="/Visayas Medical.png" 
-            alt="VisayasMed Logo" 
+          <img
+            src="/Visayas Medical.png"
+            alt="VisayasMed Logo"
             className={styles.sidebarLogoImg}
           />
           <h2>VisayasMed Hospital</h2>
@@ -529,13 +695,16 @@ const AdminDashboard = () => {
             <Users size={20} />
             <span>Doctors List</span>
           </button>
-          <button
-            className={`${styles.navItem} ${activeTab === 'users' ? styles.active : ''}`}
-            onClick={() => { setActiveTab('users'); setIsMobileMenuOpen(false); }}
-          >
-            <UserCog size={20} />
-            <span>System Users</span>
-          </button>
+
+          {isAdministrator && (
+            <button
+              className={`${styles.navItem} ${activeTab === 'users' ? styles.active : ''}`}
+              onClick={() => { setActiveTab('users'); setIsMobileMenuOpen(false); }}
+            >
+              <UserCog size={20} />
+              <span>System Users</span>
+            </button>
+          )}
 
         </nav>
 
@@ -573,8 +742,8 @@ const AdminDashboard = () => {
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div style={{ textAlign: 'right', fontSize: '0.85rem' }}>
-                <p style={{ fontWeight: 700 }}>{currentUser?.userName || 'Admin'}</p>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}>{currentUser?.role || 'Administrator'}</p>
+                <p style={{ fontWeight: 700 }}>{user?.displayName || 'Administrator'}</p>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}>{user?.email}</p>
               </div>
               <div style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <UserRound size={20} color="#64748b" />
@@ -626,13 +795,13 @@ const AdminDashboard = () => {
           <section className={styles.tableSection}>
             <div className={styles.tableHeader}>
               <h2>{activeTab === 'doctors' ? 'Physician List' : 'System Accounts'}</h2>
-              
+
               <div className={styles.tableActions}>
                 <div className={styles.filtersGroup}>
                   {activeTab === 'doctors' ? (
                     <>
-                      <select 
-                        value={deptFilter} 
+                      <select
+                        value={deptFilter}
                         onChange={(e) => setDeptFilter(e.target.value)}
                         className={styles.filterSelect}
                       >
@@ -641,8 +810,8 @@ const AdminDashboard = () => {
                           <option key={dept} value={dept}>{dept}</option>
                         ))}
                       </select>
-                      <select 
-                        value={specFilter} 
+                      <select
+                        value={specFilter}
                         onChange={(e) => setSpecFilter(e.target.value)}
                         className={styles.filterSelect}
                       >
@@ -653,8 +822,8 @@ const AdminDashboard = () => {
                       </select>
                     </>
                   ) : (
-                    <select 
-                      value={roleFilter} 
+                    <select
+                      value={roleFilter}
                       onChange={(e) => setRoleFilter(e.target.value)}
                       className={styles.filterSelect}
                     >
@@ -664,8 +833,8 @@ const AdminDashboard = () => {
                       ))}
                     </select>
                   )}
-                  <select 
-                    value={statusFilter} 
+                  <select
+                    value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value)}
                     className={styles.filterSelect}
                   >
@@ -677,7 +846,7 @@ const AdminDashboard = () => {
 
                 <div className={styles.buttonGroup}>
                   {activeTab === 'doctors' && (
-                    <button 
+                    <button
                       onClick={handleExportExcel}
                       className={styles.exportBtn}
                       title="Export to Excel"
@@ -686,23 +855,24 @@ const AdminDashboard = () => {
                       Export Excel
                     </button>
                   )}
-                  <button 
-                    onClick={handleAddNew}
-                    className={styles.addNewBtn}
-                  >
-                    <Plus size={18} />
-                    Add {activeTab === 'doctors' ? 'Doctor' : 'User'}
-                  </button>
+
+                  {/* Only show Add User if admin */}
+                  {(activeTab === 'doctors' || isAdministrator) && (
+                    <button
+                      onClick={handleAddNew}
+                      className={styles.addNewBtn}
+                    >
+                      <Plus size={18} />
+                      Add {activeTab === 'doctors' ? 'Doctor' : 'User'}
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
 
             <div className={styles.tableContainer}>
               {loading ? (
-                <div className={styles.loadingContainer}>
-                  <div className={styles.spinner}></div>
-                  <p>Fetching records...</p>
-                </div>
+                <LoadingSpinner message="Fetching records..." />
               ) : (
                 <table className={styles.table}>
                   <thead>
@@ -746,37 +916,37 @@ const AdminDashboard = () => {
                               </div>
                             </td>
                             <td>
-                               <span className={`${styles.statusBadge} ${doc.IsActive !== false ? styles.statusActive : styles.statusInactive}`}>
-                                 {doc.IsActive !== false ? 'Active' : 'Inactive'}
-                               </span>
+                              <span className={`${styles.statusBadge} ${doc.IsActive !== false ? styles.statusActive : styles.statusInactive}`}>
+                                {doc.IsActive !== false ? 'Active' : 'Inactive'}
+                              </span>
                             </td>
                             <td>
-                               <div className={styles.actionButtons}>
-                                 <button onClick={() => handleView(doc)} className={styles.actionBtn} title="View Details">
-                                   <Eye size={18} />
-                                 </button>
-                                 <button onClick={() => handleEdit(doc)} className={styles.actionBtn} title="Edit">
-                                   <Pencil size={18} />
-                                 </button>
-                                 {doc.IsActive !== false ? (
-                                   <button 
-                                     onClick={() => confirmDelete(doc)} 
-                                     className={`${styles.actionBtn} ${styles.deleteBtn}`} 
-                                     title="Deactivate"
-                                   >
-                                     <Trash2 size={18} />
-                                   </button>
-                                 ) : (
-                                   <button 
-                                     onClick={() => confirmRestore(doc)} 
-                                     className={styles.actionBtn} 
-                                     title="Restore"
-                                     style={{ color: '#10b981', borderColor: '#10b981' }}
-                                   >
-                                     <RotateCcw size={18} />
-                                   </button>
-                                 )}
-                               </div>
+                              <div className={styles.actionButtons}>
+                                <button onClick={() => handleView(doc)} className={styles.actionBtn} title="View Details">
+                                  <Eye size={18} />
+                                </button>
+                                <button onClick={() => handleEdit(doc)} className={styles.actionBtn} title="Edit">
+                                  <Pencil size={18} />
+                                </button>
+                                {doc.IsActive !== false ? (
+                                  <button
+                                    onClick={() => confirmDelete(doc)}
+                                    className={`${styles.actionBtn} ${styles.deleteBtn}`}
+                                    title="Deactivate"
+                                  >
+                                    <Trash2 size={18} />
+                                  </button>
+                                ) : (
+                                  <button
+                                    onClick={() => confirmRestore(doc)}
+                                    className={styles.actionBtn}
+                                    title="Restore"
+                                    style={{ color: '#10b981', borderColor: '#10b981' }}
+                                  >
+                                    <RotateCcw size={18} />
+                                  </button>
+                                )}
+                              </div>
                             </td>
                           </tr>
                         ))
@@ -810,37 +980,37 @@ const AdminDashboard = () => {
                               </div>
                             </td>
                             <td>
-                               <span className={`${styles.statusBadge} ${user.IsActive !== false ? styles.statusActive : styles.statusInactive}`}>
-                                 {user.IsActive !== false ? 'Active' : 'Inactive'}
-                               </span>
+                              <span className={`${styles.statusBadge} ${user.IsActive !== false ? styles.statusActive : styles.statusInactive}`}>
+                                {user.IsActive !== false ? 'Active' : 'Inactive'}
+                              </span>
                             </td>
                             <td>
-                               <div className={styles.actionButtons}>
-                                 <button onClick={() => handleView(user)} className={styles.actionBtn} title="View Details">
-                                   <Eye size={18} />
-                                 </button>
-                                 <button onClick={() => handleEdit(user)} className={styles.actionBtn} title="Edit">
-                                   <Pencil size={18} />
-                                 </button>
-                                 {user.IsActive !== false ? (
-                                   <button 
-                                     onClick={() => confirmDelete(user)} 
-                                     className={`${styles.actionBtn} ${styles.deleteBtn}`} 
-                                     title="Deactivate"
-                                   >
-                                     <Trash2 size={18} />
-                                   </button>
-                                 ) : (
-                                   <button 
-                                     onClick={() => confirmRestore(user)} 
-                                     className={styles.actionBtn} 
-                                     title="Restore"
-                                     style={{ color: '#10b981', borderColor: '#10b981' }}
-                                   >
-                                     <RotateCcw size={18} />
-                                   </button>
-                                 )}
-                               </div>
+                              <div className={styles.actionButtons}>
+                                <button onClick={() => handleView(user)} className={styles.actionBtn} title="View Details">
+                                  <Eye size={18} />
+                                </button>
+                                <button onClick={() => handleEdit(user)} className={styles.actionBtn} title="Edit">
+                                  <Pencil size={18} />
+                                </button>
+                                {user.IsActive !== false ? (
+                                  <button
+                                    onClick={() => confirmDelete(user)}
+                                    className={`${styles.actionBtn} ${styles.deleteBtn}`}
+                                    title="Deactivate"
+                                  >
+                                    <Trash2 size={18} />
+                                  </button>
+                                ) : (
+                                  <button
+                                    onClick={() => confirmRestore(user)}
+                                    className={styles.actionBtn}
+                                    title="Restore"
+                                    style={{ color: '#10b981', borderColor: '#10b981' }}
+                                  >
+                                    <RotateCcw size={18} />
+                                  </button>
+                                )}
+                              </div>
                             </td>
                           </tr>
                         ))
@@ -863,8 +1033,8 @@ const AdminDashboard = () => {
         onClose={() => setIsDoctorModalOpen(false)}
         title={modalMode === 'view' ? 'Physician Details' : modalMode === 'edit' ? 'Update Physician Info' : 'Register New Physician'}
       >
-        <DataEntryForm 
-          isModal={true} 
+        <DataEntryForm
+          isModal={true}
           mode={modalMode}
           initialData={selectedItem}
           currentUserEmail={currentUser?.userName || currentUser?.email || 'System'}
@@ -882,7 +1052,7 @@ const AdminDashboard = () => {
         onClose={() => setIsUserModalOpen(false)}
         title={modalMode === 'view' ? 'Account Details' : modalMode === 'edit' ? 'Update Staff Account' : 'Create Staff Account'}
       >
-        <UserModal 
+        <UserModal
           mode={modalMode}
           initialData={selectedItem}
           onCancel={() => setIsUserModalOpen(false)}
@@ -915,11 +1085,11 @@ const AdminDashboard = () => {
             <AlertCircle size={48} style={{ margin: '0 auto' }} />
           </div>
           <p style={{ marginBottom: '1.5rem', color: 'var(--text-secondary)' }}>
-            Are you sure you want to deactivate this {activeTab === 'doctors' ? 'doctor' : 'user'}? 
+            Are you sure you want to deactivate this {activeTab === 'doctors' ? 'doctor' : 'user'}?
             This will mark them as inactive in the system.
           </p>
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-            <button 
+            <button
               onClick={() => setIsDeleteModalOpen(false)}
               style={{
                 padding: '0.6rem 1.5rem',
@@ -932,7 +1102,7 @@ const AdminDashboard = () => {
             >
               Cancel
             </button>
-            <button 
+            <button
               onClick={handleDelete}
               style={{
                 padding: '0.6rem 1.5rem',
@@ -962,11 +1132,11 @@ const AdminDashboard = () => {
             <RotateCcw size={48} style={{ margin: '0 auto' }} />
           </div>
           <p style={{ marginBottom: '1.5rem', color: 'var(--text-secondary)' }}>
-            Are you sure you want to restore this {activeTab === 'doctors' ? 'doctor' : 'user'}? 
+            Are you sure you want to restore this {activeTab === 'doctors' ? 'doctor' : 'user'}?
             This will mark them as active again.
           </p>
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-            <button 
+            <button
               onClick={() => setIsRestoreModalOpen(false)}
               style={{
                 padding: '0.6rem 1.5rem',
@@ -979,7 +1149,7 @@ const AdminDashboard = () => {
             >
               Cancel
             </button>
-            <button 
+            <button
               onClick={handleRestore}
               style={{
                 padding: '0.6rem 1.5rem',
@@ -999,7 +1169,7 @@ const AdminDashboard = () => {
       </Modal>
 
       {/* Sidebar Overlay for Mobile */}
-      <div 
+      <div
         className={`${styles.sidebarOverlay} ${isMobileMenuOpen ? styles.active : ''}`}
         onClick={() => setIsMobileMenuOpen(false)}
       />

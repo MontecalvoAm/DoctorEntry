@@ -1,0 +1,154 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2100;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.modal {
+    background: white;
+    width: 90%;
+    max-width: 400px;
+    border-radius: 16px;
+    padding: 2.5rem 1.5rem 1.5rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    position: relative;
+    text-align: center;
+    animation: slideUp 0.3s ease-out;
+}
+
+.closeBtn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: #64748b;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    display: flex;
+    transition: all 0.2s;
+}
+
+.closeBtn:hover {
+    background: #f1f5f9;
+    color: #1e293b;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.iconWrapper {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.success {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+}
+
+.error {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+.icon {
+    animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 0.75rem;
+}
+
+.message {
+    color: #64748b;
+    font-size: 1rem;
+    line-height: 1.5;
+    margin: 0 0 1.5rem;
+}
+
+.actionBtn {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+}
+
+.successBtn {
+    background: #10b981;
+    color: white;
+}
+
+.successBtn:hover {
+    background: #059669;
+    transform: translateY(-1px);
+}
+
+.errorBtn {
+    background: #ef4444;
+    color: white;
+}
+
+.errorBtn:hover {
+    background: #dc2626;
+    transform: translateY(-1px);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes popIn {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

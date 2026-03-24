@@ -1,16 +1,16 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
-import { 
-  getFirestore, 
-  collection, 
-  addDoc, 
-  serverTimestamp, 
-  getDocs, 
-  query, 
-  orderBy, 
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  serverTimestamp,
+  getDocs,
+  query,
+  orderBy,
   where,
   limit,
-  doc, 
-  updateDoc 
+  doc,
+  updateDoc
 } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 
@@ -37,21 +37,21 @@ const db = getFirestore(app);
 export const checkDuplicate = async (collectionName: string, fieldName: string, value: any, excludeDocId?: string) => {
   try {
     let q = query(
-      collection(db, collectionName), 
+      collection(db, collectionName),
       where(fieldName, '==', value),
       limit(1)
     );
-    
+
     const querySnapshot = await getDocs(q);
-    
+
     if (querySnapshot.empty) return false;
-    
+
     // If we have a match, check if it's the same document we're updating
     if (excludeDocId) {
       const match = querySnapshot.docs[0];
       return match.id !== excludeDocId;
     }
-    
+
     return true;
   } catch (error) {
     console.error(`Error checking duplicate for ${fieldName}:`, error);
@@ -131,4 +131,4 @@ export const getCollectionData = async (collectionName: string) => {
 
 const auth = getAuth(app);
 
-export { db, auth };
+export { db, auth, app };
