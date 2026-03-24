@@ -1,0 +1,1472 @@
+/* [project]/src/components/AdminDashboard/AdminDashboard.module.css [app-client] (css) */
+.AdminDashboard-module__X-M2sW__dashboardWrapper {
+  background-color: var(--bg-main);
+  min-height: 100vh;
+  color: var(--text-primary);
+  font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif;
+  display: flex;
+}
+
+.AdminDashboard-module__X-M2sW__sidebar {
+  width: var(--sidebar-width);
+  background: linear-gradient(180deg, var(--primary-dark) 0%, #1e3a8a 100%);
+  color: #fff;
+  z-index: 100;
+  flex-direction: column;
+  flex-shrink: 0;
+  height: 100vh;
+  transition: all .3s;
+  display: flex;
+  position: sticky;
+  top: 0;
+}
+
+.AdminDashboard-module__X-M2sW__sidebarLogo {
+  height: var(--header-height);
+  border-bottom: 1px solid #ffffff1a;
+  align-items: center;
+  gap: .75rem;
+  padding: 0 1.5rem;
+  display: flex;
+}
+
+.AdminDashboard-module__X-M2sW__sidebarLogo h2 {
+  letter-spacing: -.3px;
+  color: #fff;
+  white-space: nowrap;
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.AdminDashboard-module__X-M2sW__sidebarLogoImg {
+  object-fit: contain;
+  background: #fff;
+  border-radius: 50%;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  padding: 4px;
+  box-shadow: 0 2px 8px #00000026;
+}
+
+.AdminDashboard-module__X-M2sW__sidebarNav {
+  flex-direction: column;
+  flex: 1;
+  gap: .5rem;
+  padding: 1.5rem .75rem;
+  display: flex;
+}
+
+.AdminDashboard-module__X-M2sW__navItem {
+  border-radius: var(--radius-md);
+  color: #ffffffb3;
+  cursor: pointer;
+  text-align: left;
+  background: none;
+  border: none;
+  align-items: center;
+  gap: .75rem;
+  width: 100%;
+  padding: .75rem 1rem;
+  font-size: .95rem;
+  font-weight: 600;
+  transition: all .2s;
+  display: flex;
+}
+
+.AdminDashboard-module__X-M2sW__navItem:hover {
+  color: #fff;
+  background: #ffffff0d;
+}
+
+.AdminDashboard-module__X-M2sW__navItem.AdminDashboard-module__X-M2sW__active {
+  color: #fff;
+  background: #ffffff26;
+  box-shadow: inset 0 0 0 1px #ffffff1a;
+}
+
+.AdminDashboard-module__X-M2sW__sidebarFooter {
+  border-top: 1px solid #ffffff1a;
+  padding: 1.5rem;
+}
+
+.AdminDashboard-module__X-M2sW__logoutBtn {
+  border-radius: var(--radius-md);
+  color: #f87171;
+  cursor: pointer;
+  background: #ef44441a;
+  border: 1px solid #ef444433;
+  align-items: center;
+  gap: .75rem;
+  width: 100%;
+  padding: .75rem 1rem;
+  font-weight: 600;
+  transition: all .2s;
+  display: flex;
+}
+
+.AdminDashboard-module__X-M2sW__logoutBtn:hover {
+  background: var(--primary-blue);
+  color: #fff;
+}
+
+.AdminDashboard-module__X-M2sW__mainContent {
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+}
+
+.AdminDashboard-module__X-M2sW__header {
+  height: var(--header-height);
+  border-bottom: 1px solid var(--glass-border);
+  z-index: 50;
+  background: #fff;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem;
+  display: flex;
+  position: sticky;
+  top: 0;
+}
+
+.AdminDashboard-module__X-M2sW__headerLeft {
+  align-items: center;
+  gap: .5rem;
+  display: flex;
+}
+
+.AdminDashboard-module__X-M2sW__headerLeft h1 {
+  color: var(--text-primary);
+  white-space: nowrap;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.AdminDashboard-module__X-M2sW__mobileMenuBtn {
+  display: none !important;
+}
+
+.AdminDashboard-module__X-M2sW__headerRight {
+  align-items: center;
+  gap: 1.5rem;
+  display: flex;
+}
+
+.AdminDashboard-module__X-M2sW__searchBar {
+  background: var(--bg-main);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  align-items: center;
+  gap: .5rem;
+  width: 300px;
+  padding: .5rem 1rem;
+  display: flex;
+}
+
+.AdminDashboard-module__X-M2sW__searchBar input {
+  width: 100%;
+  color: var(--text-primary);
+  background: none;
+  border: none;
+  outline: none;
+  font-size: .9rem;
+}
+
+.AdminDashboard-module__X-M2sW__contentArea {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.AdminDashboard-module__X-M2sW__statsGrid {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  display: grid;
+}
+
+.AdminDashboard-module__X-M2sW__statCard {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-sm);
+  background: #fff;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  transition: transform .2s, box-shadow .2s;
+  display: flex;
+}
+
+.AdminDashboard-module__X-M2sW__statCard:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-4px);
+}
+
+.AdminDashboard-module__X-M2sW__statIcon {
+  border-radius: var(--radius-md);
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+  height: 48px;
+  display: flex;
+}
+
+.AdminDashboard-module__X-M2sW__statInfo h3 {
+  color: var(--text-secondary);
+  margin-bottom: .25rem;
+  font-size: .875rem;
+}
+
+.AdminDashboard-module__X-M2sW__statInfo p {
+  color: var(--text-primary);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.AdminDashboard-module__X-M2sW__tableSection {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-sm);
+  background: #fff;
+  overflow: hidden;
+}
+
+.AdminDashboard-module__X-M2sW__tableHeader {
+  border-bottom: 1px solid var(--glass-border);
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+}
+
+.AdminDashboard-module__X-M2sW__tableHeader h2 {
+  white-space: nowrap;
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.AdminDashboard-module__X-M2sW__tableActions {
+  flex-wrap: wrap;
+  flex: 1;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+  display: flex;
+}
+
+.AdminDashboard-module__X-M2sW__filtersGroup {
+  align-items: center;
+  gap: .75rem;
+  display: flex;
+}
+
+.AdminDashboard-module__X-M2sW__filterSelect {
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  cursor: pointer;
+  background: #fff;
+  border-radius: 8px;
+  outline: none;
+  min-width: 140px;
+  padding: .5rem .75rem;
+  font-size: .85rem;
+  font-weight: 600;
+  transition: all .2s;
+}
+
+.AdminDashboard-module__X-M2sW__filterSelect:hover {
+  border-color: #cbd5e1;
+}
+
+.AdminDashboard-module__X-M2sW__filterSelect:focus {
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 2px #416ba91a;
+}
+
+.AdminDashboard-module__X-M2sW__buttonGroup {
+  align-items: center;
+  gap: 1rem;
+  display: flex;
+}
+
+.AdminDashboard-module__X-M2sW__addNewBtn {
+  background: var(--primary-blue);
+  color: #fff;
+  cursor: pointer;
+  white-space: nowrap;
+  border: none;
+  border-radius: 8px;
+  align-items: center;
+  gap: 8px;
+  padding: .6rem 1.25rem;
+  font-size: .9rem;
+  font-weight: 600;
+  transition: all .2s;
+  display: flex;
+}
+
+.AdminDashboard-module__X-M2sW__addNewBtn:hover {
+  background: #365b8d;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px #416ba933;
+}
+
+.AdminDashboard-module__X-M2sW__addNewBtn:active {
+  transform: translateY(0);
+}
+
+.AdminDashboard-module__X-M2sW__exportBtn {
+  color: var(--primary-blue);
+  border: 1px solid var(--primary-blue);
+  cursor: pointer;
+  white-space: nowrap;
+  background: #fff;
+  border-radius: 8px;
+  align-items: center;
+  gap: 8px;
+  padding: .6rem 1.25rem;
+  font-size: .9rem;
+  font-weight: 600;
+  transition: all .2s;
+  display: flex;
+}
+
+.AdminDashboard-module__X-M2sW__exportBtn:hover {
+  background: #416ba90d;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px #416ba91a;
+}
+
+.AdminDashboard-module__X-M2sW__exportBtn:active {
+  transform: translateY(0);
+}
+
+.AdminDashboard-module__X-M2sW__tableContainer {
+  overflow-x: auto;
+}
+
+.AdminDashboard-module__X-M2sW__table {
+  border-collapse: collapse;
+  text-align: left;
+  width: 100%;
+}
+
+.AdminDashboard-module__X-M2sW__table th {
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--glass-border);
+  background: #f8fafc;
+  padding: 1rem 1.5rem;
+  font-size: .75rem;
+  font-weight: 700;
+}
+
+.AdminDashboard-module__X-M2sW__table td {
+  border-bottom: 1px solid #f1f5f9;
+  padding: 1.25rem 1.5rem;
+  font-size: .925rem;
+}
+
+.AdminDashboard-module__X-M2sW__table tr:hover td {
+  background: #fdfdfd;
+}
+
+.AdminDashboard-module__X-M2sW__docName {
+  flex-direction: column;
+  display: flex;
+}
+
+.AdminDashboard-module__X-M2sW__docName span:first-child {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.AdminDashboard-module__X-M2sW__docName span:last-child {
+  color: var(--text-secondary);
+  font-size: .85rem;
+}
+
+.AdminDashboard-module__X-M2sW__statusBadge {
+  border-radius: 50px;
+  align-items: center;
+  padding: .25rem .75rem;
+  font-size: .75rem;
+  font-weight: 700;
+  display: inline-flex;
+}
+
+.AdminDashboard-module__X-M2sW__statusActive {
+  color: #059669;
+  background: #10b9811a;
+}
+
+.AdminDashboard-module__X-M2sW__statusInactive {
+  color: #dc2626;
+  background: #ef44441a;
+}
+
+.AdminDashboard-module__X-M2sW__actionButtons {
+  justify-content: center;
+  align-items: center;
+  gap: .5rem;
+  width: 100%;
+  display: flex;
+}
+
+.AdminDashboard-module__X-M2sW__actionBtn {
+  color: #64748b;
+  cursor: pointer;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  transition: all .2s;
+  display: flex;
+}
+
+.AdminDashboard-module__X-M2sW__actionBtn:hover {
+  border-color: var(--primary-blue);
+  color: var(--primary-blue);
+  background: #416ba90d;
+}
+
+.AdminDashboard-module__X-M2sW__deleteBtn:hover {
+  color: #ef4444;
+  background: #fef2f2;
+  border-color: #ef4444;
+}
+
+.AdminDashboard-module__X-M2sW__actionBtn:disabled {
+  opacity: .3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.AdminDashboard-module__X-M2sW__auditLog {
+  font-size: .85rem;
+  line-height: 1.4;
+}
+
+.AdminDashboard-module__X-M2sW__auditLog span {
+  color: var(--text-secondary);
+  display: block;
+}
+
+.AdminDashboard-module__X-M2sW__auditLog .AdminDashboard-module__X-M2sW__author {
+  color: var(--text-muted);
+  font-size: .75rem;
+}
+
+.AdminDashboard-module__X-M2sW__loadingContainer, .AdminDashboard-module__X-M2sW__loadingWrapper {
+  color: var(--text-secondary);
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  min-height: 400px;
+  padding: 4rem 0;
+  display: flex;
+}
+
+.AdminDashboard-module__X-M2sW__spinner {
+  border: 3px solid #416ba91a;
+  border-top-color: var(--primary-blue);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: 1s linear infinite AdminDashboard-module__X-M2sW__spin;
+}
+
+@keyframes AdminDashboard-module__X-M2sW__spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.AdminDashboard-module__X-M2sW__errorBox {
+  border-radius: var(--radius-md);
+  color: #dc2626;
+  background: #fef2f2;
+  border: 1px solid #fee2e2;
+  align-items: center;
+  gap: .75rem;
+  margin: 1rem 2rem;
+  padding: 1rem;
+  font-weight: 600;
+  display: flex;
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .AdminDashboard-module__X-M2sW__sidebar {
+    width: 80px;
+  }
+
+  .AdminDashboard-module__X-M2sW__sidebarLogo h2, .AdminDashboard-module__X-M2sW__navItem span, .AdminDashboard-module__X-M2sW__sidebarFooter span {
+    display: none;
+  }
+
+  .AdminDashboard-module__X-M2sW__sidebarLogoImg {
+    margin: 0 auto;
+  }
+
+  .AdminDashboard-module__X-M2sW__sidebarNav {
+    align-items: center;
+  }
+
+  .AdminDashboard-module__X-M2sW__searchBar {
+    width: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .AdminDashboard-module__X-M2sW__sidebar {
+    width: 280px;
+    height: 100vh;
+    position: fixed;
+    transform: translateX(-100%);
+  }
+
+  .AdminDashboard-module__X-M2sW__sidebar.AdminDashboard-module__X-M2sW__mobileOpen {
+    transform: translateX(0);
+  }
+
+  .AdminDashboard-module__X-M2sW__sidebarLogo h2, .AdminDashboard-module__X-M2sW__navItem span, .AdminDashboard-module__X-M2sW__sidebarFooter span {
+    display: block !important;
+  }
+
+  .AdminDashboard-module__X-M2sW__header {
+    padding: 0 1rem;
+  }
+
+  .AdminDashboard-module__X-M2sW__headerLeft h1 {
+    font-size: 1rem;
+  }
+
+  .AdminDashboard-module__X-M2sW__headerLeft .AdminDashboard-module__X-M2sW__mobileMenuBtn {
+    width: 38px;
+    height: 38px;
+    color: var(--primary-blue);
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    justify-content: center;
+    align-items: center;
+    background: #f1f5f9 !important;
+    display: flex !important;
+  }
+
+  .AdminDashboard-module__X-M2sW__searchBar {
+    display: none;
+  }
+
+  .AdminDashboard-module__X-M2sW__statsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .AdminDashboard-module__X-M2sW__tableHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+    padding: 1.5rem 1rem;
+  }
+
+  .AdminDashboard-module__X-M2sW__tableActions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    width: 100%;
+    display: flex;
+  }
+
+  .AdminDashboard-module__X-M2sW__filtersGroup {
+    -webkit-overflow-scrolling: touch;
+    gap: .5rem;
+    width: 100%;
+    padding-bottom: .5rem;
+    display: flex;
+    overflow-x: auto;
+  }
+
+  .AdminDashboard-module__X-M2sW__filterSelect {
+    flex: 1;
+    min-width: 130px;
+  }
+
+  .AdminDashboard-module__X-M2sW__buttonGroup {
+    gap: .75rem;
+    width: 100%;
+    display: flex;
+  }
+
+  .AdminDashboard-module__X-M2sW__exportBtn, .AdminDashboard-module__X-M2sW__addNewBtn {
+    flex: 1;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    padding: .6rem .5rem;
+    font-size: .8rem;
+  }
+}
+
+.AdminDashboard-module__X-M2sW__sidebarOverlay {
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  z-index: 90;
+  background: #00000080;
+  animation: .3s AdminDashboard-module__X-M2sW__fadeIn;
+  display: none;
+  position: fixed;
+  inset: 0;
+}
+
+.AdminDashboard-module__X-M2sW__sidebarOverlay.AdminDashboard-module__X-M2sW__active {
+  display: block;
+}
+
+@keyframes AdminDashboard-module__X-M2sW__fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.AdminDashboard-module__X-M2sW__pagination {
+  border-top: 1px solid var(--glass-border);
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  padding: 1.5rem 0;
+  display: flex;
+}
+
+.AdminDashboard-module__X-M2sW__paginationLeft {
+  align-items: center;
+  gap: 2rem;
+  display: flex;
+}
+
+.AdminDashboard-module__X-M2sW__paginationRight {
+  align-items: center;
+  gap: .5rem;
+  display: flex;
+}
+
+.AdminDashboard-module__X-M2sW__pageSizeControl {
+  color: var(--text-secondary);
+  align-items: center;
+  gap: .75rem;
+  font-size: .875rem;
+  display: flex;
+}
+
+.AdminDashboard-module__X-M2sW__pageSizeSelector {
+  border-radius: var(--radius-md);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  cursor: pointer;
+  background: #fff;
+  outline: none;
+  padding: .4rem .6rem;
+  font-weight: 600;
+  transition: all .2s;
+}
+
+.AdminDashboard-module__X-M2sW__pageSizeSelector:hover {
+  border-color: var(--primary-blue);
+}
+
+.AdminDashboard-module__X-M2sW__dots {
+  color: var(--text-muted);
+  padding: 0 .25rem;
+}
+
+.AdminDashboard-module__X-M2sW__pageBtn {
+  border-radius: var(--radius-md);
+  border: 1px solid var(--glass-border);
+  min-width: 36px;
+  height: 36px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  background: #fff;
+  justify-content: center;
+  align-items: center;
+  padding: 0 .5rem;
+  font-size: .875rem;
+  font-weight: 600;
+  transition: all .2s;
+  display: flex;
+}
+
+.AdminDashboard-module__X-M2sW__pageBtn:hover:not(:disabled) {
+  border-color: var(--primary-blue);
+  color: var(--primary-blue);
+  background: #416ba90d;
+}
+
+.AdminDashboard-module__X-M2sW__pageBtn.AdminDashboard-module__X-M2sW__active {
+  background: var(--primary-blue);
+  color: #fff;
+  border-color: var(--primary-blue);
+}
+
+.AdminDashboard-module__X-M2sW__pageBtn:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+.AdminDashboard-module__X-M2sW__pageInfo {
+  color: var(--text-muted);
+  margin-right: 1rem;
+  font-size: .875rem;
+}
+
+@media (max-width: 768px) {
+  .AdminDashboard-module__X-M2sW__sidebar {
+    height: 100%;
+    position: fixed;
+    transform: translateX(-100%);
+  }
+
+  .AdminDashboard-module__X-M2sW__sidebar.AdminDashboard-module__X-M2sW__mobileOpen {
+    transform: translateX(0);
+  }
+}
+
+/* [project]/src/components/Shared/Modal.module.css [app-client] (css) */
+.Modal-module__TOdZ2W__modalOverlay {
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  background: #0009;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  animation: .2s ease-out Modal-module__TOdZ2W__fadeIn;
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.Modal-module__TOdZ2W__modalContent {
+  background: #fff;
+  border-radius: 16px;
+  flex-direction: column;
+  width: 95%;
+  max-width: 600px;
+  max-height: 95vh;
+  animation: .3s ease-out Modal-module__TOdZ2W__slideUp;
+  display: flex;
+  overflow: hidden;
+  box-shadow: 0 20px 25px -5px #0000001a, 0 10px 10px -5px #0000000a;
+}
+
+@media (max-width: 480px) {
+  .Modal-module__TOdZ2W__modalContent {
+    border-radius: 0;
+    width: 100%;
+    height: 100%;
+    max-height: 100vh;
+  }
+}
+
+.Modal-module__TOdZ2W__modalHeader {
+  border-bottom: 1px solid #e2e8f0;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+}
+
+.Modal-module__TOdZ2W__modalHeader h2 {
+  color: #1e293b;
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.Modal-module__TOdZ2W__closeBtn {
+  color: #64748b;
+  cursor: pointer;
+  background: none;
+  border: none;
+  border-radius: 6px;
+  justify-content: center;
+  align-items: center;
+  padding: 4px;
+  transition: all .2s;
+  display: flex;
+}
+
+.Modal-module__TOdZ2W__closeBtn:hover {
+  color: #1e293b;
+  background: #f1f5f9;
+}
+
+.Modal-module__TOdZ2W__modalBody {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+@keyframes Modal-module__TOdZ2W__fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes Modal-module__TOdZ2W__slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.Modal-module__TOdZ2W__modalContent.Modal-module__TOdZ2W__large {
+  max-width: 800px;
+}
+
+/* [project]/src/components/AdminDashboard/UserModal.module.css [app-client] (css) */
+.UserModal-module__1UZihq__userForm {
+  flex-direction: column;
+  gap: 1.25rem;
+  display: flex;
+}
+
+.UserModal-module__1UZihq__passwordRow {
+  gap: 1rem;
+  width: 100%;
+  display: flex;
+}
+
+@media (max-width: 640px) {
+  .UserModal-module__1UZihq__passwordRow {
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+}
+
+.UserModal-module__1UZihq__passwordRow > div {
+  flex: 1;
+}
+
+.UserModal-module__1UZihq__formGroup {
+  flex-direction: column;
+  gap: .5rem;
+  display: flex;
+}
+
+.UserModal-module__1UZihq__formGroup label {
+  color: #64748b;
+  letter-spacing: .05em;
+  font-size: .75rem;
+  font-weight: 700;
+}
+
+.UserModal-module__1UZihq__formGroup input, .UserModal-module__1UZihq__formGroup select {
+  color: #1e293b;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  outline: none;
+  padding: .75rem 1rem;
+  font-size: .95rem;
+  transition: all .2s;
+}
+
+.UserModal-module__1UZihq__formGroup input:focus, .UserModal-module__1UZihq__formGroup select:focus {
+  background: #fff;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px #3b82f61a;
+}
+
+.UserModal-module__1UZihq__passwordWrapper {
+  align-items: center;
+  display: flex;
+  position: relative;
+}
+
+.UserModal-module__1UZihq__passwordWrapper input {
+  padding-right: 44px;
+}
+
+.UserModal-module__1UZihq__passwordToggle {
+  color: #94a3b8;
+  cursor: pointer;
+  background: none;
+  border: none;
+  justify-content: center;
+  align-items: center;
+  padding: 4px;
+  transition: color .2s;
+  display: flex;
+  position: absolute;
+  right: 10px;
+}
+
+.UserModal-module__1UZihq__passwordToggle:hover:not(:disabled) {
+  color: #3b82f6;
+}
+
+.UserModal-module__1UZihq__passwordToggle:disabled {
+  cursor: default;
+  opacity: .5;
+}
+
+.UserModal-module__1UZihq__errorMessage {
+  color: #dc2626;
+  background: #fef2f2;
+  border: 1px solid #fee2e2;
+  border-radius: 8px;
+  padding: .75rem;
+  font-size: .875rem;
+  font-weight: 600;
+}
+
+.UserModal-module__1UZihq__formActions {
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+  display: flex;
+}
+
+.UserModal-module__1UZihq__cancelBtn {
+  color: #64748b;
+  cursor: pointer;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: .75rem 1.5rem;
+  font-weight: 600;
+  transition: all .2s;
+}
+
+.UserModal-module__1UZihq__cancelBtn:hover {
+  color: #1e293b;
+  background: #f1f5f9;
+}
+
+.UserModal-module__1UZihq__submitBtn {
+  color: #fff;
+  cursor: pointer;
+  background: #3b82f6;
+  border: none;
+  border-radius: 8px;
+  padding: .75rem 1.5rem;
+  font-weight: 600;
+  transition: all .2s;
+}
+
+.UserModal-module__1UZihq__submitBtn:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px #0000001a;
+}
+
+.UserModal-module__1UZihq__submitBtn:disabled {
+  opacity: .7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.UserModal-module__1UZihq__auditGrid {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 12px;
+  display: grid;
+}
+
+.UserModal-module__1UZihq__auditItem {
+  flex-direction: column;
+  gap: 2px;
+  display: flex;
+}
+
+.UserModal-module__1UZihq__auditLabel {
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+  font-size: .65rem;
+  font-weight: 700;
+}
+
+.UserModal-module__1UZihq__auditValue {
+  color: #334155;
+  font-size: .8rem;
+  font-weight: 600;
+}
+
+@media (max-width: 480px) {
+  .UserModal-module__1UZihq__auditGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* [project]/src/components/DataEntryForm/DataEntryForm.module.css [app-client] (css) */
+.DataEntryForm-module__-_tJAq__formWrapper {
+  border-radius: var(--radius-lg);
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 40px 40px;
+  animation: .8s cubic-bezier(.16, 1, .3, 1) DataEntryForm-module__-_tJAq__fadeIn;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 40px 100px #0000001f;
+}
+
+.DataEntryForm-module__-_tJAq__formHeader {
+  text-align: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 24px;
+  padding: 24px 24px 0;
+  display: flex;
+}
+
+@media (max-width: 640px) {
+  .DataEntryForm-module__-_tJAq__formHeader {
+    text-align: center;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px 16px;
+  }
+}
+
+.DataEntryForm-module__-_tJAq__logoContainer {
+  background: #fff;
+  border-radius: 100%;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  display: flex;
+  box-shadow: 0 4px 12px #00000014;
+}
+
+.DataEntryForm-module__-_tJAq__headerText {
+  text-align: left;
+}
+
+.DataEntryForm-module__-_tJAq__subtitle {
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  font-size: .7rem;
+  font-weight: 700;
+}
+
+.DataEntryForm-module__-_tJAq__badge {
+  color: var(--primary-blue);
+  letter-spacing: 2px;
+  background: #416ba914;
+  border-radius: 50px;
+  margin-bottom: 16px;
+  padding: 6px 16px;
+  font-size: .7rem;
+  font-weight: 800;
+  display: inline-block;
+}
+
+.DataEntryForm-module__-_tJAq__formHeader h1 {
+  color: #1e40af;
+  letter-spacing: .5px;
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.DataEntryForm-module__-_tJAq__addressInfo {
+  color: #64748b;
+  margin: 1px 0;
+  font-size: .8rem;
+  font-weight: 500;
+}
+
+.DataEntryForm-module__-_tJAq__contactInfo {
+  color: #64748b;
+  margin-bottom: 16px;
+  font-size: .75rem;
+  font-weight: 500;
+}
+
+.DataEntryForm-module__-_tJAq__headerSeparator {
+  background-color: #1e40af;
+  width: 100%;
+  height: 2px;
+  margin-bottom: 24px;
+}
+
+.DataEntryForm-module__-_tJAq__form {
+  flex-direction: column;
+  gap: 32px;
+  display: flex;
+}
+
+.DataEntryForm-module__-_tJAq__sectionHeader {
+  color: var(--primary-blue);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  border-bottom: 2px solid #f0f0f0;
+  margin-top: 16px;
+  padding-bottom: 12px;
+  font-size: .9rem;
+  font-weight: 800;
+}
+
+.DataEntryForm-module__-_tJAq__row {
+  flex-wrap: wrap;
+  gap: 16px;
+  display: flex;
+}
+
+.DataEntryForm-module__-_tJAq__field {
+  flex-direction: column;
+  flex: 1;
+  gap: 10px;
+  min-width: 180px;
+  display: flex;
+}
+
+.DataEntryForm-module__-_tJAq__field label {
+  color: var(--text-dark);
+  letter-spacing: .5px;
+  font-size: .85rem;
+  font-weight: 700;
+}
+
+.DataEntryForm-module__-_tJAq__field input {
+  border-radius: var(--radius-md);
+  background-color: var(--white);
+  color: var(--text-dark);
+  border: 1.5px solid #d1d5db;
+  padding: 12px 16px;
+  font-size: 1rem;
+  transition: all .3s;
+}
+
+.DataEntryForm-module__-_tJAq__field input:focus {
+  border-color: var(--primary-blue);
+  background-color: var(--white);
+  outline: none;
+  box-shadow: 0 0 0 4px #416ba91a;
+}
+
+.DataEntryForm-module__-_tJAq__field input.DataEntryForm-module__-_tJAq__invalid {
+  border-color: var(--accent-red);
+  background-color: #f3273505;
+}
+
+.DataEntryForm-module__-_tJAq__fieldErrorMessage {
+  color: var(--accent-red);
+  margin-top: 4px;
+  font-size: .75rem;
+  font-weight: 600;
+}
+
+.DataEntryForm-module__-_tJAq__privacySection {
+  border-radius: var(--radius-md);
+  background: #f9fafb;
+  border: 1px solid #f1f5f9;
+  margin-top: 16px;
+  padding: 24px;
+}
+
+.DataEntryForm-module__-_tJAq__checkboxWrapper {
+  cursor: pointer;
+  align-items: flex-start;
+  gap: 16px;
+  display: flex;
+}
+
+.DataEntryForm-module__-_tJAq__checkboxWrapper input {
+  cursor: pointer;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin-top: 3px;
+}
+
+.DataEntryForm-module__-_tJAq__checkboxLabel {
+  color: var(--text-dark);
+  font-size: .9rem;
+  line-height: 1.6;
+}
+
+.DataEntryForm-module__-_tJAq__invalidCheckbox {
+  color: var(--accent-red);
+}
+
+.DataEntryForm-module__-_tJAq__errorMessage {
+  color: var(--accent-red);
+  margin-top: 12px;
+  font-size: .85rem;
+  font-weight: 600;
+  animation: .4s ease-in-out DataEntryForm-module__-_tJAq__shake;
+}
+
+.DataEntryForm-module__-_tJAq__submitRow {
+  justify-content: center;
+  margin-top: 16px;
+  display: flex;
+}
+
+.DataEntryForm-module__-_tJAq__submitBtn {
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary-blue));
+  color: var(--white);
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  border-radius: 50px;
+  width: auto;
+  min-width: 280px;
+  padding: 12px 32px;
+  font-size: 1rem;
+  font-weight: 700;
+  transition: all .3s cubic-bezier(.16, 1, .3, 1);
+  box-shadow: 0 4px 12px #2b559733;
+}
+
+.DataEntryForm-module__-_tJAq__submitBtn:hover:not(:disabled) {
+  filter: brightness(1.1);
+  transform: translateY(-5px);
+  box-shadow: 0 25px 50px #2b559766;
+}
+
+.DataEntryForm-module__-_tJAq__submitBtn:disabled {
+  box-shadow: none;
+  cursor: not-allowed;
+  opacity: .7;
+  background: #d1d5db;
+}
+
+.DataEntryForm-module__-_tJAq__successContainer {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  max-width: 700px;
+  margin: 60px auto;
+  padding: 80px 40px;
+  animation: .6s cubic-bezier(.16, 1, .3, 1) DataEntryForm-module__-_tJAq__slideUp;
+  box-shadow: 0 40px 100px #0000001a;
+}
+
+.DataEntryForm-module__-_tJAq__successIcon {
+  color: var(--accent-green);
+  justify-content: center;
+  margin-bottom: 32px;
+  display: flex;
+}
+
+.DataEntryForm-module__-_tJAq__successContainer h2 {
+  color: var(--primary-dark);
+  margin-bottom: 16px;
+  font-size: 2rem;
+  font-weight: 900;
+}
+
+.DataEntryForm-module__-_tJAq__successContainer p {
+  color: var(--text-muted);
+  margin-bottom: 40px;
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+.DataEntryForm-module__-_tJAq__resetButton {
+  color: var(--primary-blue);
+  border: 2px solid var(--primary-blue);
+  border-radius: 50px;
+  padding: 12px 32px;
+  font-size: 1rem;
+  font-weight: 700;
+  transition: all .2s;
+}
+
+.DataEntryForm-module__-_tJAq__resetButton:hover {
+  background: var(--primary-blue);
+  color: var(--white);
+}
+
+@keyframes DataEntryForm-module__-_tJAq__fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes DataEntryForm-module__-_tJAq__slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes DataEntryForm-module__-_tJAq__shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-4px);
+  }
+
+  50% {
+    transform: translateX(4px);
+  }
+
+  75% {
+    transform: translateX(-2px);
+  }
+}
+
+@media (max-width: 768px) {
+  .DataEntryForm-module__-_tJAq__formWrapper {
+    border-radius: var(--radius-md);
+    margin: 12px auto;
+    padding: 24px 16px;
+  }
+
+  .DataEntryForm-module__-_tJAq__row {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .DataEntryForm-module__-_tJAq__formHeader h1 {
+    font-size: 1.5rem;
+  }
+
+  .DataEntryForm-module__-_tJAq__formHeader p {
+    font-size: .95rem;
+  }
+}
+
+.DataEntryForm-module__-_tJAq__formWrapper.DataEntryForm-module__-_tJAq__modalMode {
+  box-shadow: none;
+  background: none;
+  max-width: 100%;
+  margin: 0;
+  padding: 20px;
+}
+
+.DataEntryForm-module__-_tJAq__modalMode .DataEntryForm-module__-_tJAq__form {
+  gap: 24px;
+}
+
+.DataEntryForm-module__-_tJAq__modalMode .DataEntryForm-module__-_tJAq__sectionHeader {
+  margin-top: 8px;
+  font-size: .8rem;
+}
+
+.DataEntryForm-module__-_tJAq__modalMode .DataEntryForm-module__-_tJAq__sectionHeader:first-child {
+  margin-top: 0;
+}
+
+.DataEntryForm-module__-_tJAq__modalMode .DataEntryForm-module__-_tJAq__submitRow {
+  border-top: 1px solid #f1f5f9;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  display: flex;
+}
+
+.DataEntryForm-module__-_tJAq__modalMode .DataEntryForm-module__-_tJAq__submitBtn {
+  min-width: 200px;
+  padding: 10px 24px;
+}
+
+.DataEntryForm-module__-_tJAq__cancelBtn {
+  color: #64748b;
+  text-transform: uppercase;
+  cursor: pointer;
+  background: #fff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 50px;
+  padding: 10px 24px;
+  font-size: .9rem;
+  font-weight: 700;
+  transition: all .2s;
+}
+
+.DataEntryForm-module__-_tJAq__cancelBtn:hover {
+  color: #1e293b;
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.DataEntryForm-module__-_tJAq__auditGrid {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 8px;
+  padding: 16px;
+  display: grid;
+}
+
+.DataEntryForm-module__-_tJAq__auditItem {
+  flex-direction: column;
+  gap: 4px;
+  display: flex;
+}
+
+.DataEntryForm-module__-_tJAq__auditLabel {
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  font-size: .7rem;
+  font-weight: 700;
+}
+
+.DataEntryForm-module__-_tJAq__auditValue {
+  color: #1e293b;
+  font-size: .85rem;
+  font-weight: 600;
+}
+
+@media (max-width: 500px) {
+  .DataEntryForm-module__-_tJAq__auditGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/*# sourceMappingURL=src_components_2dd23c01._.css.map*/

@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/src/app/page.module.css"],"sourcesContent":[".page {\r\n  position: relative;\r\n  min-height: 100vh;\r\n  display: flex;\r\n  flex-direction: column;\r\n}\r\n\r\n.backgroundOverlay {\r\n  position: fixed;\r\n  top: 0;\r\n  left: 0;\r\n  right: 0;\r\n  bottom: 0;\r\n  z-index: -1;\r\n  background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url('/hospital-bg.png');\r\n  background-size: cover;\r\n  background-position: center;\r\n  background-attachment: fixed;\r\n  backdrop-filter: blur(3px);\r\n  /* Added slight blur to background for better form focus */\r\n  overflow: hidden;\r\n}\r\n\r\n.footer {\r\n  margin-top: auto;\r\n  padding: 15px 0;\r\n  background: var(--white);\r\n  border-top: 1px solid #eee;\r\n  text-align: center;\r\n  color: var(--text-muted);\r\n  font-size: 0.8rem;\r\n}\r\n\r\n@media (max-width: 600px) {\r\n  .footer {\r\n    padding: 24px 0;\r\n  }\r\n}"],"names":[],"mappings":"AAAA;;;;;;;AAOA;;;;;;;;;;;;;AAgBA;;;;;;;;;;AAUA;EACE"}}]
+}

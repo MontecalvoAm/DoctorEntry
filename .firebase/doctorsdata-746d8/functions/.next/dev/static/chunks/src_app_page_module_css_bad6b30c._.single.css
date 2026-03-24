@@ -1,0 +1,38 @@
+/* [project]/src/app/page.module.css [app-client] (css) */
+.page-module___8aEwW__page {
+  flex-direction: column;
+  min-height: 100vh;
+  display: flex;
+  position: relative;
+}
+
+.page-module___8aEwW__backgroundOverlay {
+  z-index: -1;
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  background-image: linear-gradient(#ffffff80, #ffffff80), url("/hospital-bg.png");
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+
+.page-module___8aEwW__footer {
+  background: var(--white);
+  text-align: center;
+  color: var(--text-muted);
+  border-top: 1px solid #eee;
+  margin-top: auto;
+  padding: 15px 0;
+  font-size: .8rem;
+}
+
+@media (max-width: 600px) {
+  .page-module___8aEwW__footer {
+    padding: 24px 0;
+  }
+}
+
+/*# sourceMappingURL=src_app_page_module_css_bad6b30c._.single.css.map*/

@@ -1,0 +1,480 @@
+[debug] [2026-03-24T02:55:06.649Z] ----------------------------------------------------------------------
+[debug] [2026-03-24T02:55:06.651Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\FRANCIE SIOCO\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2026-03-24T02:55:06.652Z] CLI Version:   15.11.0
+[debug] [2026-03-24T02:55:06.652Z] Platform:      win32
+[debug] [2026-03-24T02:55:06.652Z] Node Version:  v22.15.0
+[debug] [2026-03-24T02:55:06.652Z] Time:          Tue Mar 24 2026 10:55:06 GMT+0800 (Philippine Standard Time)
+[debug] [2026-03-24T02:55:06.652Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-03-24T02:55:08.246Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-03-24T02:55:08.247Z] > authorizing via signed-in user (aljon.montecalvo08@gmail.com)
+[debug] [2026-03-24T02:55:08.247Z] [iam] checking project doctorsdata-746d8 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-03-24T02:55:08.248Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:55:08.248Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:55:08.249Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/doctorsdata-746d8:testIamPermissions [none]
+[debug] [2026-03-24T02:55:08.249Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/doctorsdata-746d8:testIamPermissions  x-goog-user-project=doctorsdata-746d8
+[debug] [2026-03-24T02:55:08.249Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/doctorsdata-746d8:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-03-24T02:55:09.729Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/doctorsdata-746d8:testIamPermissions 200
+[debug] [2026-03-24T02:55:09.729Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/doctorsdata-746d8:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-03-24T02:55:09.730Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:55:09.730Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:55:09.730Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/doctorsdata-746d8 [none]
+[debug] [2026-03-24T02:55:10.392Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/doctorsdata-746d8 200
+[debug] [2026-03-24T02:55:10.392Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/doctorsdata-746d8 {"projectId":"doctorsdata-746d8","projectNumber":"996912669214","displayName":"DoctorsData","name":"projects/doctorsdata-746d8","resources":{"hostingSite":"doctorsdata-746d8"},"state":"ACTIVE","etag":"1_445cb792-9dbb-4899-a72e-64bcb0f20d8e"}
+[debug] [2026-03-24T02:55:12.396Z] defaultcredentials: writing to file C:\Users\FRANCIE SIOCO\AppData\Roaming\firebase\aljon_montecalvo08_gmail.com_application_default_credentials.json
+[debug] [2026-03-24T02:55:12.397Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:55:12.397Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:55:12.397Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites pageToken=&pageSize=10
+[debug] [2026-03-24T02:55:13.601Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites 200
+[debug] [2026-03-24T02:55:13.601Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites {"sites":[{"name":"projects/doctorsdata-746d8/sites/doctorsdata-746d8","defaultUrl":"https://doctorsdata-746d8.web.app","appId":"1:996912669214:web:6528cb2846b7fedf10840f","type":"DEFAULT_SITE"}]}
+[debug] [2026-03-24T02:55:13.601Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:55:13.602Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:55:13.602Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:996912669214:web:6528cb2846b7fedf10840f/config [none]
+[debug] [2026-03-24T02:55:14.531Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:996912669214:web:6528cb2846b7fedf10840f/config 200
+[debug] [2026-03-24T02:55:14.531Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:996912669214:web:6528cb2846b7fedf10840f/config {"projectId":"doctorsdata-746d8","appId":"1:996912669214:web:6528cb2846b7fedf10840f","storageBucket":"doctorsdata-746d8.firebasestorage.app","apiKey":"AIzaSyBDEtou6ehnOgRob3sI8DZUJdOBdEZvWVk","authDomain":"doctorsdata-746d8.firebaseapp.com","messagingSenderId":"996912669214","measurementId":"G-4PSXC84DP6","projectNumber":"996912669214","version":"2"}
+[info] 
+   Thank you for trying our early preview of Next.js support on Firebase Hosting.
+   During the preview, support is best-effort and breaking changes can be expected. Proceed with caution.
+   The integration is known to work with Next.js version 12 - 15.0. You may encounter errors.
+
+   Documentation: https://firebase.google.com/docs/hosting/frameworks/nextjs
+   File a bug: https://github.com/firebase/firebase-tools/issues/new?template=bug_report.md
+   Submit a feature request: https://github.com/firebase/firebase-tools/issues/new?template=feature_request.md
+
+   We'd love to learn from you. Express your interest in helping us shape the future of Firebase Hosting: https://goo.gle/41enW5X
+
+[debug] [2026-03-24T02:55:18.969Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:55:18.969Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:55:18.970Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites/doctorsdata-746d8 [none]
+[debug] [2026-03-24T02:55:20.234Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites/doctorsdata-746d8 200
+[debug] [2026-03-24T02:55:20.234Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites/doctorsdata-746d8 {"name":"projects/doctorsdata-746d8/sites/doctorsdata-746d8","defaultUrl":"https://doctorsdata-746d8.web.app","appId":"1:996912669214:web:6528cb2846b7fedf10840f","type":"DEFAULT_SITE"}
+[info] ▲ Next.js 16.1.7 (Turbopack)
+
+[info] - Environments: .env.local
+
+
+[info] ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+
+[info]   Creating an optimized production build ...
+
+[info] ✓ Compiled successfully in 6.1s
+
+[info]   Running TypeScript ...
+
+[info]   Collecting page data using 7 workers ...
+
+[info] Firebase Admin initialized successfully
+
+[info] Firebase Admin initialized successfully
+
+[info] Firebase Admin initialized successfully
+
+[info]   Generating static pages using 7 workers (0/10) ...
+
+[info]   Generating static pages using 7 workers (2/10) 
+
+[info]   Generating static pages using 7 workers (4/10) 
+
+[info] AdminDashboard rendered
+
+[info]   Generating static pages using 7 workers (7/10) 
+
+[info] ✓ Generating static pages using 7 workers (10/10) in 645.0ms
+
+[info]   Finalizing page optimization ...
+
+[info] 
+
+[info] Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ƒ /api/auth/login
+├ ƒ /api/auth/logout
+├ ƒ /api/doctors
+├ ƒ /api/users
+├ ○ /dashboard
+└ ○ /login
+
+
+ƒ Proxy (Middleware)
+
+
+[info] ○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+
+[info] Building a Cloud Function to run this application. This is needed due to:
+[info]  • middleware
+[info]  • non-static component /api/auth/login/route
+[info]  • non-static component /api/auth/logout/route
+[info]  • non-static component /api/doctors/route
+[info]  • non-static component /api/users/route
+[info] 
+[debug] [2026-03-24T02:55:37.140Z] skipping /dashboard due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-03-24T02:55:37.140Z] skipping /login due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-03-24T02:55:46.805Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:55:46.806Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:55:46.806Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites/doctorsdata-746d8 [none]
+[debug] [2026-03-24T02:55:48.229Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites/doctorsdata-746d8 200
+[debug] [2026-03-24T02:55:48.229Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites/doctorsdata-746d8 {"name":"projects/doctorsdata-746d8/sites/doctorsdata-746d8","defaultUrl":"https://doctorsdata-746d8.web.app","appId":"1:996912669214:web:6528cb2846b7fedf10840f","type":"DEFAULT_SITE"}
+[debug] [2026-03-24T02:55:50.379Z] Error: EPERM: operation not permitted, symlink 'C:\Users\FRANCIE SIOCO\Aljon\Vismed\DoctorsDataEntry\node_modules\rimraf' -> 'C:\Users\FRANCIE SIOCO\Aljon\Vismed\DoctorsDataEntry\.firebase\doctorsdata-746d8\functions\.next\node_modules\rimraf-ca920c550f67ed39'
+[debug] [2026-03-24T02:56:05.977Z] ----------------------------------------------------------------------
+[debug] [2026-03-24T02:56:05.979Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\FRANCIE SIOCO\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2026-03-24T02:56:05.980Z] CLI Version:   15.11.0
+[debug] [2026-03-24T02:56:05.980Z] Platform:      win32
+[debug] [2026-03-24T02:56:05.980Z] Node Version:  v22.15.0
+[debug] [2026-03-24T02:56:05.980Z] Time:          Tue Mar 24 2026 10:56:05 GMT+0800 (Philippine Standard Time)
+[debug] [2026-03-24T02:56:05.980Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-03-24T02:56:07.510Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-03-24T02:56:07.510Z] > authorizing via signed-in user (aljon.montecalvo08@gmail.com)
+[debug] [2026-03-24T02:56:07.510Z] [iam] checking project doctorsdata-746d8 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-03-24T02:56:07.512Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:56:07.512Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:56:07.513Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/doctorsdata-746d8:testIamPermissions [none]
+[debug] [2026-03-24T02:56:07.513Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/doctorsdata-746d8:testIamPermissions  x-goog-user-project=doctorsdata-746d8
+[debug] [2026-03-24T02:56:07.513Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/doctorsdata-746d8:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-03-24T02:56:08.856Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/doctorsdata-746d8:testIamPermissions 200
+[debug] [2026-03-24T02:56:08.856Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/doctorsdata-746d8:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-03-24T02:56:08.856Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:56:08.856Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:56:08.857Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/doctorsdata-746d8 [none]
+[debug] [2026-03-24T02:56:10.164Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/doctorsdata-746d8 200
+[debug] [2026-03-24T02:56:10.164Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/doctorsdata-746d8 {"projectId":"doctorsdata-746d8","projectNumber":"996912669214","displayName":"DoctorsData","name":"projects/doctorsdata-746d8","resources":{"hostingSite":"doctorsdata-746d8"},"state":"ACTIVE","etag":"1_445cb792-9dbb-4899-a72e-64bcb0f20d8e"}
+[debug] [2026-03-24T02:56:12.021Z] defaultcredentials: writing to file C:\Users\FRANCIE SIOCO\AppData\Roaming\firebase\aljon_montecalvo08_gmail.com_application_default_credentials.json
+[debug] [2026-03-24T02:56:12.023Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:56:12.023Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:56:12.023Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites pageToken=&pageSize=10
+[debug] [2026-03-24T02:56:13.382Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites 200
+[debug] [2026-03-24T02:56:13.382Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites {"sites":[{"name":"projects/doctorsdata-746d8/sites/doctorsdata-746d8","defaultUrl":"https://doctorsdata-746d8.web.app","appId":"1:996912669214:web:6528cb2846b7fedf10840f","type":"DEFAULT_SITE"}]}
+[debug] [2026-03-24T02:56:13.382Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:56:13.382Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:56:13.383Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:996912669214:web:6528cb2846b7fedf10840f/config [none]
+[debug] [2026-03-24T02:56:14.448Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:996912669214:web:6528cb2846b7fedf10840f/config 200
+[debug] [2026-03-24T02:56:14.449Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:996912669214:web:6528cb2846b7fedf10840f/config {"projectId":"doctorsdata-746d8","appId":"1:996912669214:web:6528cb2846b7fedf10840f","storageBucket":"doctorsdata-746d8.firebasestorage.app","apiKey":"AIzaSyBDEtou6ehnOgRob3sI8DZUJdOBdEZvWVk","authDomain":"doctorsdata-746d8.firebaseapp.com","messagingSenderId":"996912669214","measurementId":"G-4PSXC84DP6","projectNumber":"996912669214","version":"2"}
+[info] 
+   Thank you for trying our early preview of Next.js support on Firebase Hosting.
+   During the preview, support is best-effort and breaking changes can be expected. Proceed with caution.
+   The integration is known to work with Next.js version 12 - 15.0. You may encounter errors.
+
+   Documentation: https://firebase.google.com/docs/hosting/frameworks/nextjs
+   File a bug: https://github.com/firebase/firebase-tools/issues/new?template=bug_report.md
+   Submit a feature request: https://github.com/firebase/firebase-tools/issues/new?template=feature_request.md
+
+   We'd love to learn from you. Express your interest in helping us shape the future of Firebase Hosting: https://goo.gle/41enW5X
+
+[debug] [2026-03-24T02:56:19.097Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:56:19.098Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:56:19.098Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites/doctorsdata-746d8 [none]
+[debug] [2026-03-24T02:56:20.119Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites/doctorsdata-746d8 200
+[debug] [2026-03-24T02:56:20.119Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites/doctorsdata-746d8 {"name":"projects/doctorsdata-746d8/sites/doctorsdata-746d8","defaultUrl":"https://doctorsdata-746d8.web.app","appId":"1:996912669214:web:6528cb2846b7fedf10840f","type":"DEFAULT_SITE"}
+[info] ▲ Next.js 16.1.7 (Turbopack)
+
+[info] - Environments: .env.local
+
+
+[info] ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+
+[info]   Creating an optimized production build ...
+
+[info] ✓ Compiled successfully in 6.2s
+
+[info]   Running TypeScript ...
+
+[info]   Collecting page data using 7 workers ...
+
+[info] Firebase Admin initialized successfully
+
+[info] Firebase Admin initialized successfully
+
+[info] Firebase Admin initialized successfully
+
+[info]   Generating static pages using 7 workers (0/10) ...
+
+[info]   Generating static pages using 7 workers (2/10) 
+
+[info]   Generating static pages using 7 workers (4/10) 
+
+[info] AdminDashboard rendered
+
+[info]   Generating static pages using 7 workers (7/10) 
+
+[info] ✓ Generating static pages using 7 workers (10/10) in 437.2ms
+
+[info]   Finalizing page optimization ...
+
+[info] 
+
+[info] Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ƒ /api/auth/login
+├ ƒ /api/auth/logout
+├ ƒ /api/doctors
+├ ƒ /api/users
+├ ○ /dashboard
+└ ○ /login
+
+
+ƒ Proxy (Middleware)
+
+
+[info] ○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+
+[info] Building a Cloud Function to run this application. This is needed due to:
+[info]  • middleware
+[info]  • non-static component /api/auth/login/route
+[info]  • non-static component /api/auth/logout/route
+[info]  • non-static component /api/doctors/route
+[info]  • non-static component /api/users/route
+[info] 
+[debug] [2026-03-24T02:56:37.874Z] skipping /dashboard due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-03-24T02:56:37.874Z] skipping /login due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-03-24T02:56:41.197Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:56:41.197Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:56:41.197Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites/doctorsdata-746d8 [none]
+[debug] [2026-03-24T02:56:42.478Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites/doctorsdata-746d8 200
+[debug] [2026-03-24T02:56:42.478Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites/doctorsdata-746d8 {"name":"projects/doctorsdata-746d8/sites/doctorsdata-746d8","defaultUrl":"https://doctorsdata-746d8.web.app","appId":"1:996912669214:web:6528cb2846b7fedf10840f","type":"DEFAULT_SITE"}
+[debug] [2026-03-24T02:56:45.455Z] Error: EPERM: operation not permitted, symlink 'C:\Users\FRANCIE SIOCO\Aljon\Vismed\DoctorsDataEntry\node_modules\rimraf' -> 'C:\Users\FRANCIE SIOCO\Aljon\Vismed\DoctorsDataEntry\.firebase\doctorsdata-746d8\functions\.next\node_modules\rimraf-ca920c550f67ed39'
+[debug] [2026-03-24T02:57:45.184Z] ----------------------------------------------------------------------
+[debug] [2026-03-24T02:57:45.186Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\FRANCIE SIOCO\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2026-03-24T02:57:45.186Z] CLI Version:   15.11.0
+[debug] [2026-03-24T02:57:45.186Z] Platform:      win32
+[debug] [2026-03-24T02:57:45.186Z] Node Version:  v22.15.0
+[debug] [2026-03-24T02:57:45.187Z] Time:          Tue Mar 24 2026 10:57:45 GMT+0800 (Philippine Standard Time)
+[debug] [2026-03-24T02:57:45.187Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-03-24T02:57:46.662Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-03-24T02:57:46.662Z] > authorizing via signed-in user (aljon.montecalvo08@gmail.com)
+[debug] [2026-03-24T02:57:46.663Z] [iam] checking project doctorsdata-746d8 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-03-24T02:57:46.664Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:57:46.664Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:57:46.665Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/doctorsdata-746d8:testIamPermissions [none]
+[debug] [2026-03-24T02:57:46.665Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/doctorsdata-746d8:testIamPermissions  x-goog-user-project=doctorsdata-746d8
+[debug] [2026-03-24T02:57:46.665Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/doctorsdata-746d8:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-03-24T02:57:48.022Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/doctorsdata-746d8:testIamPermissions 200
+[debug] [2026-03-24T02:57:48.022Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/doctorsdata-746d8:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-03-24T02:57:48.023Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:57:48.023Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:57:48.023Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/doctorsdata-746d8 [none]
+[debug] [2026-03-24T02:57:48.482Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/doctorsdata-746d8 200
+[debug] [2026-03-24T02:57:48.482Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/doctorsdata-746d8 {"projectId":"doctorsdata-746d8","projectNumber":"996912669214","displayName":"DoctorsData","name":"projects/doctorsdata-746d8","resources":{"hostingSite":"doctorsdata-746d8"},"state":"ACTIVE","etag":"1_445cb792-9dbb-4899-a72e-64bcb0f20d8e"}
+[debug] [2026-03-24T02:57:50.351Z] defaultcredentials: writing to file C:\Users\FRANCIE SIOCO\AppData\Roaming\firebase\aljon_montecalvo08_gmail.com_application_default_credentials.json
+[debug] [2026-03-24T02:57:50.352Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:57:50.352Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:57:50.352Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites pageToken=&pageSize=10
+[debug] [2026-03-24T02:57:51.304Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites 200
+[debug] [2026-03-24T02:57:51.305Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites {"sites":[{"name":"projects/doctorsdata-746d8/sites/doctorsdata-746d8","defaultUrl":"https://doctorsdata-746d8.web.app","appId":"1:996912669214:web:6528cb2846b7fedf10840f","type":"DEFAULT_SITE"}]}
+[debug] [2026-03-24T02:57:51.305Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:57:51.305Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:57:51.305Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:996912669214:web:6528cb2846b7fedf10840f/config [none]
+[debug] [2026-03-24T02:57:52.194Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:996912669214:web:6528cb2846b7fedf10840f/config 200
+[debug] [2026-03-24T02:57:52.194Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:996912669214:web:6528cb2846b7fedf10840f/config {"projectId":"doctorsdata-746d8","appId":"1:996912669214:web:6528cb2846b7fedf10840f","storageBucket":"doctorsdata-746d8.firebasestorage.app","apiKey":"AIzaSyBDEtou6ehnOgRob3sI8DZUJdOBdEZvWVk","authDomain":"doctorsdata-746d8.firebaseapp.com","messagingSenderId":"996912669214","measurementId":"G-4PSXC84DP6","projectNumber":"996912669214","version":"2"}
+[info] 
+   Thank you for trying our early preview of Next.js support on Firebase Hosting.
+   During the preview, support is best-effort and breaking changes can be expected. Proceed with caution.
+   The integration is known to work with Next.js version 12 - 15.0. You may encounter errors.
+
+   Documentation: https://firebase.google.com/docs/hosting/frameworks/nextjs
+   File a bug: https://github.com/firebase/firebase-tools/issues/new?template=bug_report.md
+   Submit a feature request: https://github.com/firebase/firebase-tools/issues/new?template=feature_request.md
+
+   We'd love to learn from you. Express your interest in helping us shape the future of Firebase Hosting: https://goo.gle/41enW5X
+
+[debug] [2026-03-24T02:57:56.890Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:57:56.890Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:57:56.890Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites/doctorsdata-746d8 [none]
+[debug] [2026-03-24T02:57:57.888Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites/doctorsdata-746d8 200
+[debug] [2026-03-24T02:57:57.888Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites/doctorsdata-746d8 {"name":"projects/doctorsdata-746d8/sites/doctorsdata-746d8","defaultUrl":"https://doctorsdata-746d8.web.app","appId":"1:996912669214:web:6528cb2846b7fedf10840f","type":"DEFAULT_SITE"}
+[info] ▲ Next.js 16.1.7 (Turbopack)
+
+[info] - Environments: .env.local
+
+
+[info] ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+
+[info]   Creating an optimized production build ...
+
+[info] ✓ Compiled successfully in 7.4s
+
+[info]   Running TypeScript ...
+
+[info]   Collecting page data using 7 workers ...
+
+[info] Firebase Admin initialized successfully
+
+[info] Firebase Admin initialized successfully
+
+[info] Firebase Admin initialized successfully
+
+[info]   Generating static pages using 7 workers (0/10) ...
+
+[info]   Generating static pages using 7 workers (2/10) 
+
+[info]   Generating static pages using 7 workers (4/10) 
+
+[info] AdminDashboard rendered
+
+[info]   Generating static pages using 7 workers (7/10) 
+
+[info] ✓ Generating static pages using 7 workers (10/10) in 508.1ms
+
+[info]   Finalizing page optimization ...
+
+[info] 
+
+[info] Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ƒ /api/auth/login
+├ ƒ /api/auth/logout
+├ ƒ /api/doctors
+├ ƒ /api/users
+├ ○ /dashboard
+└ ○ /login
+
+
+ƒ Proxy (Middleware)
+
+
+[info] ○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+
+[info] Building a Cloud Function to run this application. This is needed due to:
+[info]  • middleware
+[info]  • non-static component /api/auth/login/route
+[info]  • non-static component /api/auth/logout/route
+[info]  • non-static component /api/doctors/route
+[info]  • non-static component /api/users/route
+[info] 
+[debug] [2026-03-24T02:58:17.961Z] skipping /dashboard due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-03-24T02:58:17.962Z] skipping /login due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-03-24T02:58:21.490Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:58:21.491Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T02:58:21.491Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites/doctorsdata-746d8 [none]
+[debug] [2026-03-24T02:58:22.339Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites/doctorsdata-746d8 200
+[debug] [2026-03-24T02:58:22.339Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites/doctorsdata-746d8 {"name":"projects/doctorsdata-746d8/sites/doctorsdata-746d8","defaultUrl":"https://doctorsdata-746d8.web.app","appId":"1:996912669214:web:6528cb2846b7fedf10840f","type":"DEFAULT_SITE"}
+[debug] [2026-03-24T02:58:24.554Z] Error: EPERM: operation not permitted, symlink 'C:\Users\FRANCIE SIOCO\Aljon\Vismed\DoctorsDataEntry\node_modules\firebase-admin' -> 'C:\Users\FRANCIE SIOCO\Aljon\Vismed\DoctorsDataEntry\.firebase\doctorsdata-746d8\functions\.next\node_modules\firebase-admin-a14c8a5423a75469'
+[debug] [2026-03-24T03:05:00.652Z] ----------------------------------------------------------------------
+[debug] [2026-03-24T03:05:00.654Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\FRANCIE SIOCO\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2026-03-24T03:05:00.654Z] CLI Version:   15.11.0
+[debug] [2026-03-24T03:05:00.654Z] Platform:      win32
+[debug] [2026-03-24T03:05:00.654Z] Node Version:  v22.15.0
+[debug] [2026-03-24T03:05:00.654Z] Time:          Tue Mar 24 2026 11:05:00 GMT+0800 (Philippine Standard Time)
+[debug] [2026-03-24T03:05:00.655Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-03-24T03:05:02.198Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-03-24T03:05:02.198Z] > authorizing via signed-in user (aljon.montecalvo08@gmail.com)
+[debug] [2026-03-24T03:05:02.199Z] [iam] checking project doctorsdata-746d8 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-03-24T03:05:02.200Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T03:05:02.200Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T03:05:02.200Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/doctorsdata-746d8:testIamPermissions [none]
+[debug] [2026-03-24T03:05:02.200Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/doctorsdata-746d8:testIamPermissions  x-goog-user-project=doctorsdata-746d8
+[debug] [2026-03-24T03:05:02.200Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/doctorsdata-746d8:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-03-24T03:05:03.570Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/doctorsdata-746d8:testIamPermissions 200
+[debug] [2026-03-24T03:05:03.571Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/doctorsdata-746d8:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-03-24T03:05:03.571Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T03:05:03.571Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T03:05:03.571Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/doctorsdata-746d8 [none]
+[debug] [2026-03-24T03:05:04.057Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/doctorsdata-746d8 200
+[debug] [2026-03-24T03:05:04.058Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/doctorsdata-746d8 {"projectId":"doctorsdata-746d8","projectNumber":"996912669214","displayName":"DoctorsData","name":"projects/doctorsdata-746d8","resources":{"hostingSite":"doctorsdata-746d8"},"state":"ACTIVE","etag":"1_445cb792-9dbb-4899-a72e-64bcb0f20d8e"}
+[debug] [2026-03-24T03:05:05.763Z] defaultcredentials: writing to file C:\Users\FRANCIE SIOCO\AppData\Roaming\firebase\aljon_montecalvo08_gmail.com_application_default_credentials.json
+[debug] [2026-03-24T03:05:05.764Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T03:05:05.764Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T03:05:05.764Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites pageToken=&pageSize=10
+[debug] [2026-03-24T03:05:06.963Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites 200
+[debug] [2026-03-24T03:05:06.963Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites {"sites":[{"name":"projects/doctorsdata-746d8/sites/doctorsdata-746d8","defaultUrl":"https://doctorsdata-746d8.web.app","appId":"1:996912669214:web:6528cb2846b7fedf10840f","type":"DEFAULT_SITE"}]}
+[debug] [2026-03-24T03:05:06.963Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T03:05:06.963Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T03:05:06.964Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:996912669214:web:6528cb2846b7fedf10840f/config [none]
+[debug] [2026-03-24T03:05:07.819Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:996912669214:web:6528cb2846b7fedf10840f/config 200
+[debug] [2026-03-24T03:05:07.819Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:996912669214:web:6528cb2846b7fedf10840f/config {"projectId":"doctorsdata-746d8","appId":"1:996912669214:web:6528cb2846b7fedf10840f","storageBucket":"doctorsdata-746d8.firebasestorage.app","apiKey":"AIzaSyBDEtou6ehnOgRob3sI8DZUJdOBdEZvWVk","authDomain":"doctorsdata-746d8.firebaseapp.com","messagingSenderId":"996912669214","measurementId":"G-4PSXC84DP6","projectNumber":"996912669214","version":"2"}
+[info] 
+   Thank you for trying our early preview of Next.js support on Firebase Hosting.
+   During the preview, support is best-effort and breaking changes can be expected. Proceed with caution.
+   The integration is known to work with Next.js version 12 - 15.0. You may encounter errors.
+
+   Documentation: https://firebase.google.com/docs/hosting/frameworks/nextjs
+   File a bug: https://github.com/firebase/firebase-tools/issues/new?template=bug_report.md
+   Submit a feature request: https://github.com/firebase/firebase-tools/issues/new?template=feature_request.md
+
+   We'd love to learn from you. Express your interest in helping us shape the future of Firebase Hosting: https://goo.gle/41enW5X
+
+[debug] [2026-03-24T03:05:11.784Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T03:05:11.784Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T03:05:11.784Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites/doctorsdata-746d8 [none]
+[debug] [2026-03-24T03:05:12.326Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites/doctorsdata-746d8 200
+[debug] [2026-03-24T03:05:12.326Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites/doctorsdata-746d8 {"name":"projects/doctorsdata-746d8/sites/doctorsdata-746d8","defaultUrl":"https://doctorsdata-746d8.web.app","appId":"1:996912669214:web:6528cb2846b7fedf10840f","type":"DEFAULT_SITE"}
+[info] ▲ Next.js 16.1.7 (Turbopack)
+
+[info] - Environments: .env.local
+
+
+[info] ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+
+[info]   Creating an optimized production build ...
+
+[info] ✓ Compiled successfully in 6.0s
+
+[info]   Running TypeScript ...
+
+[info]   Collecting page data using 7 workers ...
+
+[info] Firebase Admin initialized successfully
+
+[info] Firebase Admin initialized successfully
+
+[info] Firebase Admin initialized successfully
+
+[info]   Generating static pages using 7 workers (0/10) ...
+
+[info]   Generating static pages using 7 workers (2/10) 
+
+[info]   Generating static pages using 7 workers (4/10) 
+
+[info] AdminDashboard rendered
+
+[info]   Generating static pages using 7 workers (7/10) 
+
+[info] ✓ Generating static pages using 7 workers (10/10) in 400.4ms
+
+[info]   Finalizing page optimization ...
+
+[info] 
+
+[info] Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ƒ /api/auth/login
+├ ƒ /api/auth/logout
+├ ƒ /api/doctors
+├ ƒ /api/users
+├ ○ /dashboard
+└ ○ /login
+
+
+ƒ Proxy (Middleware)
+
+[info] 
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+
+[info] Building a Cloud Function to run this application. This is needed due to:
+[info]  • middleware
+[info]  • non-static component /api/auth/login/route
+[info]  • non-static component /api/auth/logout/route
+[info]  • non-static component /api/doctors/route
+[info]  • non-static component /api/users/route
+[info] 
+[debug] [2026-03-24T03:05:29.378Z] skipping /dashboard due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-03-24T03:05:29.378Z] skipping /login due to it matching an unsupported rewrite/redirect/header or middlware
+[debug] [2026-03-24T03:05:32.905Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T03:05:32.905Z] Checked if tokens are valid: true, expires at: 1774323589204
+[debug] [2026-03-24T03:05:32.906Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites/doctorsdata-746d8 [none]
+[debug] [2026-03-24T03:05:33.950Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites/doctorsdata-746d8 200
+[debug] [2026-03-24T03:05:33.951Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/doctorsdata-746d8/sites/doctorsdata-746d8 {"name":"projects/doctorsdata-746d8/sites/doctorsdata-746d8","defaultUrl":"https://doctorsdata-746d8.web.app","appId":"1:996912669214:web:6528cb2846b7fedf10840f","type":"DEFAULT_SITE"}
+[debug] [2026-03-24T03:05:35.966Z] Error: EPERM: operation not permitted, symlink 'C:\Users\FRANCIE SIOCO\Aljon\Vismed\DoctorsDataEntry\node_modules\rimraf' -> 'C:\Users\FRANCIE SIOCO\Aljon\Vismed\DoctorsDataEntry\.firebase\doctorsdata-746d8\functions\.next\node_modules\rimraf-ca920c550f67ed39'
