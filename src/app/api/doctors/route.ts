@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { adminDb } from '@/lib/firebaseAdmin';
+import { adminDb, adminAuth, setCustomUserClaims } from '@/lib/firebaseAdmin';
 import * as admin from 'firebase-admin';
 import { z } from 'zod';
 import { logSecurityEvent } from '@/lib/audit';
@@ -103,6 +103,56 @@ export async function POST(request: Request) {
             IsActive: true,
             CreatedFrom: 'Web App',
         });
+
+        // Auto-create system user account if possible
+        try {
+            // Strip spaces, convert to lowercase
+            const cleanSurname = data.surname.replace(/\s+/g, '').toLowerCase();
+            const cleanGivenName = data.givenName.replace(/\s+/g, '').toLowerCase();
+            const generatedEmail = `${cleanSurname}${cleanGivenName}@visayasmed.com.ph`;
+
+            // Password format: @FirstnameLastname(2-digit month)
+            // Example: @JohnDoe03
+            const formatForPassword = (str: string) => {
+                const noSpaces = str.replace(/\s+/g, '').toLowerCase();
+                return noSpaces ? noSpaces.charAt(0).toUpperCase() + noSpaces.slice(1) : '';
+            };
+            const monthStr = String(new Date().getMonth() + 1).padStart(2, '0');
+            const generatedPassword = `@${formatForPassword(data.givenName)}${formatForPassword(data.surname)}${monthStr}`;
+
+            const userRecord = await adminAuth.createUser({
+                email: generatedEmail,
+                password: generatedPassword,
+                displayName: `${data.givenName} ${data.surname}`,
+            });
+
+            await adminDb.collection('M_Users').doc(userRecord.uid).set({
+                UserName: `${data.givenName} ${data.surname}`,
+                Email: generatedEmail,
+                Role: 'Doctor (Access)',
+                IsActive: true,
+                CreatedAt: admin.firestore.FieldValue.serverTimestamp(),
+                UpdatedAt: admin.firestore.FieldValue.serverTimestamp(),
+                CreatedBy: 'System Auto-Create',
+            });
+
+            await setCustomUserClaims(userRecord.uid, 'Doctor (Access)');
+
+            await logSecurityEvent({
+                action: 'AUTO_CREATE_USER',
+                details: `System automatically created account for doctor: ${data.givenName} ${data.surname}`,
+                performer: 'System',
+                target: generatedEmail,
+            });
+        } catch (authError: any) {
+            console.error('Error auto-creating user account:', authError);
+            await logSecurityEvent({
+                action: 'AUTO_CREATE_USER_FAILED',
+                details: `Failed to create auto-account for ${data.givenName} ${data.surname}. Reason: ${authError.message}`,
+                performer: 'System',
+                target: data.email,
+            });
+        }
 
         // Log the registration event (A09)
         await logSecurityEvent({
