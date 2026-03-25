@@ -220,7 +220,7 @@ const UserModal: React.FC<UserModalProps> = ({
           >
             <option value="Staff">Staff</option>
             <option value="Administrator">Administrator</option>
-            <option value="Doctor (Access)">Doctor (Access)</option>
+            <option value="Doctor">Doctor</option>
           </select>
         </div>
 

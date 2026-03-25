@@ -4,6 +4,7 @@ import * as admin from 'firebase-admin';
 import { z } from 'zod';
 import { logSecurityEvent } from '@/lib/audit';
 import { sensitiveActionLimiter } from '@/lib/ratelimit';
+import crypto from 'crypto';
 
 // Zod Schema for Doctor Registration (A03)
 const DoctorSchema = z.object({
@@ -170,15 +171,9 @@ export async function POST(request: Request) {
         try {
             // Use the email provided in the registration form
             const emailPart = data.email.toLowerCase();
-
-            // Password format: @FirstnameLastname(2-digit month)
-            // Example: @JohnDoe03
-            const formatForPassword = (str: string) => {
-                const noSpaces = str.replace(/\s+/g, '').toLowerCase();
-                return noSpaces ? noSpaces.charAt(0).toUpperCase() + noSpaces.slice(1) : '';
-            };
-            const monthStr = String(new Date().getMonth() + 1).padStart(2, '0');
-            const generatedPassword = `@${formatForPassword(data.givenName)}${formatForPassword(data.surname)}${monthStr}`;
+            
+            // Secure, non-predictable random password (A07)
+            const generatedPassword = crypto.randomBytes(12).toString('base64');
 
             const userRecord = await adminAuth.createUser({
                 email: emailPart,
@@ -189,14 +184,14 @@ export async function POST(request: Request) {
             await adminDb.collection('M_Users').doc(userRecord.uid).set({
                 UserName: `${data.givenName} ${data.surname}`,
                 Email: emailPart,
-                Role: 'Doctor (Access)',
+                Role: 'Doctor',
                 IsActive: true,
                 CreatedAt: admin.firestore.FieldValue.serverTimestamp(),
                 UpdatedAt: admin.firestore.FieldValue.serverTimestamp(),
                 CreatedBy: 'System Auto-Create',
             });
 
-            await setCustomUserClaims(userRecord.uid, 'Doctor (Access)');
+            await setCustomUserClaims(userRecord.uid, 'Doctor');
 
             await logSecurityEvent({
                 action: 'AUTO_CREATE_USER',

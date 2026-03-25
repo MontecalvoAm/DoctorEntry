@@ -1,9 +1,21 @@
 import { adminAuth } from '@/lib/firebaseAdmin';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
+import { globalRateLimiter } from '@/lib/ratelimit';
+import { logSecurityEvent } from '@/lib/audit';
 
 export async function POST(request: Request) {
     try {
+        const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
+        
+        // Rate Limiting (A04)
+        if (globalRateLimiter) {
+            const { success } = await globalRateLimiter.limit(ip);
+            if (!success) {
+                return NextResponse.json({ error: 'Too many login attempts. Please try again later.' }, { status: 429 });
+            }
+        }
+
         const { idToken } = await request.json();
 
         if (!idToken) {
@@ -30,9 +42,28 @@ export async function POST(request: Request) {
             sameSite: 'lax',
         });
 
+        // Audit Log (A09)
+        const decodedToken = await adminAuth.verifySessionCookie(sessionCookie);
+        await logSecurityEvent({
+            action: 'LOGIN',
+            performer: decodedToken.email || decodedToken.uid,
+            details: 'Successful user login via Session Cookie',
+            ip: ip
+        });
+
         return NextResponse.json({ success: true });
     } catch (error: any) {
         console.error('Session cookie creation failed:', error);
+        
+        // Log failed attempt if it was a token issue (A09)
+        const ip = request.headers.get('x-forwarded-for') || '127.0.0.1';
+        await logSecurityEvent({
+            action: 'UNAUTHORIZED_ACCESS',
+            performer: 'Unknown',
+            details: `Failed login attempt: ${error.message}`,
+            ip: ip
+        });
+
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }

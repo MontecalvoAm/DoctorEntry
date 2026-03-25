@@ -33,6 +33,7 @@ import { updateFormData } from '@/lib/firebase';
 import StatusModal from '../Shared/StatusModal';
 import LoadingSpinner from '../Shared/LoadingSpinner';
 import DoctorProfile from './DoctorProfile';
+import AdminProfile from './AdminProfile';
 
 interface Doctor {
   id: string;
@@ -72,7 +73,7 @@ interface User {
 const AdminDashboard = () => {
   console.log('AdminDashboard rendered');
   const { user, loading: authLoading, isAdministrator, role } = useAuth();
-  const isDoctor = role === 'Doctor (Access)';
+  const isDoctor = role === 'Doctor';
   const [activeTab, setActiveTab] = useState<'doctors' | 'users' | 'profile'>(isDoctor ? 'profile' : 'doctors');
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [users, setUsers] = useState<User[]>([]);
@@ -290,9 +291,14 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     if (!authLoading && user) {
-      fetchData();
+      // Ensure doctors are forced to the profile tab before any data is fetched
+      if (isDoctor && activeTab !== 'profile') {
+        setActiveTab('profile');
+      } else {
+        fetchData();
+      }
     }
-  }, [authLoading, user, activeTab]);
+  }, [authLoading, user, activeTab, isDoctor]);
 
   // Reset filters when changing tabs
   useEffect(() => {
@@ -313,7 +319,12 @@ const AdminDashboard = () => {
     setError('');
 
     try {
-      if (activeTab === 'doctors') {
+      if (activeTab === 'profile') {
+        // Profile components handle their own fetching/display
+        setLoading(false);
+        return;
+      }
+ else if (activeTab === 'doctors') {
         const result = await getCollectionData('doctors');
         if (result.success) {
           setDoctors(result.data as Doctor[]);
@@ -325,7 +336,7 @@ const AdminDashboard = () => {
             message: 'Failed to fetch physicians list.'
           });
         }
-      } else {
+      } else if (activeTab === 'users') {
         // Use API for users to avoid exposing password hashes
         const token = await auth.currentUser?.getIdToken();
         const response = await fetch('/api/users', {
@@ -545,7 +556,7 @@ const AdminDashboard = () => {
   // Extract unique departments and specializations for filters
   const departments = Array.from(new Set(doctors.map(doc => doc.department))).filter(Boolean).sort();
   const specializations = Array.from(new Set(doctors.map(doc => doc.specialty))).filter(Boolean).sort();
-  const roles = ['Administrator', 'Staff', 'Doctor (Access)'];
+  const roles = ['Administrator', 'Staff', 'Doctor'];
 
   const filteredDoctors = doctors.filter(doc => {
     const matchesSearch = searchQuery === '' ||
@@ -710,7 +721,7 @@ const AdminDashboard = () => {
               onClick={() => { setActiveTab('doctors'); setIsMobileMenuOpen(false); }}
             >
               <Users size={20} />
-              <span>Doctors List</span>
+              <span>Doctors</span>
             </button>
           )}
 
@@ -720,27 +731,30 @@ const AdminDashboard = () => {
               onClick={() => { setActiveTab('users'); setIsMobileMenuOpen(false); }}
             >
               <UserCog size={20} />
-              <span>System Users</span>
+              <span>Users</span>
             </button>
           )}
 
-          {isDoctor && (
-            <button
-              className={`${styles.navItem} ${activeTab === 'profile' ? styles.active : ''}`}
-              onClick={() => { setActiveTab('profile'); setIsMobileMenuOpen(false); }}
-            >
-              <UserRound size={20} />
-              <span>My Profile</span>
-            </button>
-          )}
+          <button
+            className={`${styles.navItem} ${activeTab === 'profile' ? styles.active : ''}`}
+            onClick={() => { setActiveTab('profile'); setIsMobileMenuOpen(false); }}
+          >
+            <UserRound size={20} />
+            <span>My Profile</span>
+          </button>
 
         </nav>
 
         <div className={styles.sidebarFooter}>
-          <button onClick={handleLogout} className={styles.logoutBtn}>
-            <LogOut size={18} />
-            <span>Sign Out</span>
-          </button>
+          <div className={styles.userInfoSidebar}>
+            <div className={styles.userAvatarSidebar}>
+              <UserRound size={20} color="#64748b" />
+            </div>
+            <div className={styles.userDetailsSidebar}>
+              <p className={styles.userNameSidebar}>{user?.displayName || (isAdministrator ? 'Administrator' : 'System User')}</p>
+              <p className={styles.userEmailSidebar}>{user?.email}</p>
+            </div>
+          </div>
         </div>
       </aside>
 
@@ -771,15 +785,10 @@ const AdminDashboard = () => {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ textAlign: 'right', fontSize: '0.85rem' }}>
-                <p style={{ fontWeight: 700 }}>{user?.displayName || 'Administrator'}</p>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}>{user?.email}</p>
-              </div>
-              <div style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <UserRound size={20} color="#64748b" />
-              </div>
-            </div>
+            <button onClick={handleLogout} className={styles.headerLogoutBtn}>
+              <LogOut size={18} />
+              <span>Sign Out</span>
+            </button>
           </div>
         </header>
 
@@ -825,7 +834,7 @@ const AdminDashboard = () => {
           )}
 
           {activeTab === 'profile' ? (
-            <DoctorProfile />
+            isDoctor ? <DoctorProfile /> : <AdminProfile />
           ) : (
             <>
               {/* Table Section */}

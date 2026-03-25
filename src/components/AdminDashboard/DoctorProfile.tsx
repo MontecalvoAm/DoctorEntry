@@ -27,6 +27,11 @@ const DoctorProfile = () => {
             const result = await response.json();
             if (result.success) {
                 setDoctorData(result.data);
+                // Also refresh current auth user to sync sidebar info (name/email)
+                if (auth.currentUser) {
+                    await auth.currentUser.reload();
+                    console.log('Auth user reloaded after profile update');
+                }
             } else {
                 setError(result.error || 'Failed to fetch profile');
             }
@@ -73,7 +78,7 @@ const DoctorProfile = () => {
                 </div>
                 <div className={styles.accountBadge}>
                     <ShieldCheck size={16} />
-                    <span>Doctor (Access) Verified</span>
+                    <span>Doctor Account Verified</span>
                 </div>
             </div>
 

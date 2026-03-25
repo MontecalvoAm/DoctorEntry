@@ -29,8 +29,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             console.log('Auth state changed:', user ? 'User logged in' : 'No user');
             setUser(user);
             if (user) {
-                // Check for custom claims for secure RBAC (10/10)
-                const idTokenResult = await user.getIdTokenResult();
+                // Force refresh token to ensure custom claims are up-to-date (10/10 OWASP)
+                const idTokenResult = await user.getIdTokenResult(true);
                 setIsAdministrator(!!idTokenResult.claims.administrator);
                 setRole(idTokenResult.claims.role as string || null);
             } else {

@@ -9,7 +9,7 @@ import { globalRateLimiter, sensitiveActionLimiter } from '@/lib/ratelimit';
 const UserCreateSchema = z.object({
     Email: z.string().email(),
     UserName: z.string().min(2),
-    Role: z.enum(['Administrator', 'Staff', 'Doctor (Access)']),
+    Role: z.enum(['Administrator', 'Staff', 'Doctor']),
     Password: z.string().min(8),
 });
 
@@ -18,7 +18,7 @@ const UserUpdateSchema = z.object({
     uid: z.string().optional(),
     Email: z.string().email().optional(),
     UserName: z.string().min(2).optional(),
-    Role: z.enum(['Administrator', 'Staff', 'Doctor (Access)']).optional(),
+    Role: z.enum(['Administrator', 'Staff', 'Doctor']).optional(),
     Password: z.string().min(8).optional(),
     IsActive: z.boolean().optional(),
 });
