@@ -2,7 +2,7 @@ import { adminDb } from './firebaseAdmin';
 import * as admin from 'firebase-admin';
 
 export interface AuditLogEntry {
-    action: 'CREATE_USER' | 'UPDATE_USER' | 'DELETE_USER' | 'LOGIN' | 'UNAUTHORIZED_ACCESS' | 'CREATE_DOCTOR' | 'AUTO_CREATE_USER' | 'AUTO_CREATE_USER_FAILED';
+    action: 'CREATE_USER' | 'UPDATE_USER' | 'DELETE_USER' | 'LOGIN' | 'UNAUTHORIZED_ACCESS' | 'CREATE_DOCTOR' | 'UPDATE_DOCTOR' | 'DELETE_DOCTOR' | 'AUTO_CREATE_USER' | 'AUTO_CREATE_USER_FAILED';
     details: string;
     performer: string; // Email or UID
     target?: string;   // Affected user/resource

@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import styles from './DataEntryForm.module.css';
-import { saveFormData, updateFormData, checkDuplicate } from '@/lib/firebase';
+import { saveFormData, updateFormData, checkDuplicate, auth } from '@/lib/firebase';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import StatusModal from '../Shared/StatusModal';
 import LoadingSpinner from '../Shared/LoadingSpinner';
@@ -159,7 +159,17 @@ const DataEntryForm: React.FC<DataEntryFormProps> = ({
 
       let result;
       if (mode === 'edit' && initialData?.id) {
-        result = await updateFormData('doctors', initialData.id, formData, currentUserEmail);
+        // Use secure API for updates (A01, A03, A09)
+        const token = await auth.currentUser?.getIdToken();
+        const response = await fetch('/api/doctors', {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ id: initialData.id, ...formData })
+        });
+        result = await response.json();
       } else {
         // Generate reCAPTCHA token (A04)
         if (!executeRecaptcha) {
@@ -253,7 +263,20 @@ const DataEntryForm: React.FC<DataEntryFormProps> = ({
 
   const formatFullDate = (timestamp: any) => {
     if (!timestamp) return 'N/A';
-    const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp.seconds * 1000);
+    
+    let date: Date;
+    if (typeof timestamp === 'string') {
+      date = new Date(timestamp);
+    } else if (timestamp && typeof timestamp.toDate === 'function') {
+      date = timestamp.toDate();
+    } else if (timestamp && typeof timestamp.seconds === 'number') {
+      date = new Date(timestamp.seconds * 1000);
+    } else {
+      date = new Date(timestamp);
+    }
+
+    if (isNaN(date.getTime())) return 'Invalid Date';
+
     return date.toLocaleString(undefined, {
       year: 'numeric',
       month: 'short',

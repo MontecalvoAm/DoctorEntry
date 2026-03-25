@@ -90,7 +90,7 @@ const UserModal: React.FC<UserModalProps> = ({
       }
 
       if (password) {
-        payload.Password = password.trim();
+        payload.Password = password;
       }
 
       const token = await auth.currentUser?.getIdToken();
@@ -144,7 +144,20 @@ const UserModal: React.FC<UserModalProps> = ({
 
   const formatFullDate = (timestamp: any) => {
     if (!timestamp) return 'N/A';
-    const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp.seconds * 1000);
+    
+    let date: Date;
+    if (typeof timestamp === 'string') {
+      date = new Date(timestamp);
+    } else if (timestamp && typeof timestamp.toDate === 'function') {
+      date = timestamp.toDate();
+    } else if (timestamp && typeof timestamp.seconds === 'number') {
+      date = new Date(timestamp.seconds * 1000);
+    } else {
+      date = new Date(timestamp);
+    }
+
+    if (isNaN(date.getTime())) return 'Invalid Date';
+
     return date.toLocaleString(undefined, {
       year: 'numeric',
       month: 'short',
@@ -207,7 +220,7 @@ const UserModal: React.FC<UserModalProps> = ({
           >
             <option value="Staff">Staff</option>
             <option value="Administrator">Administrator</option>
-            <option value="Doctor">Doctor (Access)</option>
+            <option value="Doctor (Access)">Doctor (Access)</option>
           </select>
         </div>
 

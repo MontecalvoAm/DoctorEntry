@@ -32,6 +32,7 @@ import DataEntryForm from '../DataEntryForm/DataEntryForm';
 import { updateFormData } from '@/lib/firebase';
 import StatusModal from '../Shared/StatusModal';
 import LoadingSpinner from '../Shared/LoadingSpinner';
+import DoctorProfile from './DoctorProfile';
 
 interface Doctor {
   id: string;
@@ -55,6 +56,7 @@ interface Doctor {
 
 interface User {
   id: string;
+  uid?: string;
   Email: string;
   UserName: string;
   Role: string;
@@ -69,8 +71,9 @@ interface User {
 
 const AdminDashboard = () => {
   console.log('AdminDashboard rendered');
-  const { user, loading: authLoading, isAdministrator } = useAuth();
-  const [activeTab, setActiveTab] = useState<'doctors' | 'users'>('doctors');
+  const { user, loading: authLoading, isAdministrator, role } = useAuth();
+  const isDoctor = role === 'Doctor (Access)';
+  const [activeTab, setActiveTab] = useState<'doctors' | 'users' | 'profile'>(isDoctor ? 'profile' : 'doctors');
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -518,7 +521,20 @@ const AdminDashboard = () => {
 
   const formatDate = (timestamp: any) => {
     if (!timestamp) return 'N/A';
-    const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp.seconds * 1000);
+    
+    let date: Date;
+    if (typeof timestamp === 'string') {
+      date = new Date(timestamp);
+    } else if (timestamp && typeof timestamp.toDate === 'function') {
+      date = timestamp.toDate();
+    } else if (timestamp && typeof timestamp.seconds === 'number') {
+      date = new Date(timestamp.seconds * 1000);
+    } else {
+      date = new Date(timestamp);
+    }
+
+    if (isNaN(date.getTime())) return 'Invalid Date';
+
     return date.toLocaleDateString(undefined, {
       year: 'numeric',
       month: 'short',
@@ -613,7 +629,7 @@ const AdminDashboard = () => {
             })
             .map((page, index, array) => (
               <React.Fragment key={page}>
-                {index > 0 && array[index - 1] !== page - 1 && <span className={styles.dots}>...</span>}
+                {index > 0 && array[index - 1] !== page - 1 && <span key={`dots-${page}`} className={styles.dots}>...</span>}
                 <button
                   className={`${styles.pageBtn} ${currentPage === page ? styles.active : ''}`}
                   onClick={() => setCurrentPage(page)}
@@ -706,6 +722,16 @@ const AdminDashboard = () => {
             </button>
           )}
 
+          {isDoctor && (
+            <button
+              className={`${styles.navItem} ${activeTab === 'profile' ? styles.active : ''}`}
+              onClick={() => { setActiveTab('profile'); setIsMobileMenuOpen(false); }}
+            >
+              <UserRound size={20} />
+              <span>My Profile</span>
+            </button>
+          )}
+
         </nav>
 
         <div className={styles.sidebarFooter}>
@@ -727,7 +753,10 @@ const AdminDashboard = () => {
             >
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
-            <h1>{activeTab === 'doctors' ? 'Doctors List' : 'System Users'}</h1>
+            <h1>
+              {activeTab === 'doctors' ? 'Doctors List' : 
+               activeTab === 'users' ? 'System Users' : 'My Account Settings'}
+            </h1>
           </div>
 
           <div className={styles.headerRight}>
@@ -791,8 +820,12 @@ const AdminDashboard = () => {
             </div>
           )}
 
-          {/* Table Section */}
-          <section className={styles.tableSection}>
+          {activeTab === 'profile' ? (
+            <DoctorProfile />
+          ) : (
+            <>
+              {/* Table Section */}
+              <section className={styles.tableSection}>
             <div className={styles.tableHeader}>
               <h2>{activeTab === 'doctors' ? 'Physician List' : 'System Accounts'}</h2>
 
@@ -900,7 +933,7 @@ const AdminDashboard = () => {
                     {activeTab === 'doctors' ? (
                       paginatedData.length > 0 ? (
                         (paginatedData as Doctor[]).map((doc) => (
-                          <tr key={doc.id}>
+                          <tr key={doc.id || doc.email}>
                             <td>
                               <div className={styles.docName}>
                                 <span>{doc.surname}, {doc.givenName}</span>
@@ -951,12 +984,12 @@ const AdminDashboard = () => {
                           </tr>
                         ))
                       ) : (
-                        <tr><td colSpan={6} style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>No doctors found matching your search.</td></tr>
+                        <tr key="no-doctors"><td colSpan={6} style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>No doctors found matching your search.</td></tr>
                       )
                     ) : (
                       paginatedData.length > 0 ? (
                         (paginatedData as User[]).map((user) => (
-                          <tr key={user.id}>
+                          <tr key={user.uid || user.id || user.Email}>
                             <td>
                               <div style={{ fontWeight: 600 }}>{user.UserName}</div>
                             </td>
@@ -1015,7 +1048,7 @@ const AdminDashboard = () => {
                           </tr>
                         ))
                       ) : (
-                        <tr><td colSpan={6} style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>No users found matching your search.</td></tr>
+                        <tr key="no-users"><td colSpan={6} style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>No users found matching your search.</td></tr>
                       )
                     )}
                   </tbody>
@@ -1024,7 +1057,9 @@ const AdminDashboard = () => {
             </div>
             <Pagination />
           </section>
-        </div>
+        </>
+      )}
+    </div>
       </main>
 
       {/* Doctor Modal (Create/Edit/View) */}

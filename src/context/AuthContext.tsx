@@ -8,18 +8,21 @@ interface AuthContextType {
     user: User | null;
     loading: boolean;
     isAdministrator: boolean;
+    role: string | null;
 }
 
 const AuthContext = createContext<AuthContextType>({
     user: null,
     loading: true,
     isAdministrator: false,
+    role: null,
 });
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
     const [isAdministrator, setIsAdministrator] = useState(false);
+    const [role, setRole] = useState<string | null>(null);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -29,8 +32,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 // Check for custom claims for secure RBAC (10/10)
                 const idTokenResult = await user.getIdTokenResult();
                 setIsAdministrator(!!idTokenResult.claims.administrator);
+                setRole(idTokenResult.claims.role as string || null);
             } else {
                 setIsAdministrator(false);
+                setRole(null);
             }
             setLoading(false);
             console.log('Auth loading finished');
@@ -40,7 +45,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }, []);
 
     return (
-        <AuthContext.Provider value={{ user, loading, isAdministrator }}>
+        <AuthContext.Provider value={{ user, loading, isAdministrator, role }}>
             {children}
         </AuthContext.Provider>
     );

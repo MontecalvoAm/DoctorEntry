@@ -78,15 +78,26 @@ export async function GET(request: Request) {
             const fUser = firestoreUsers[email] || {};
             const { Password, ...safeFUser } = fUser;
 
-            return {
-                uid: userRecord.uid,
-                email: userRecord.email,
-                displayName: userRecord.displayName || fUser.UserName,
-                disabled: userRecord.disabled,
-                lastSignInTime: userRecord.metadata.lastSignInTime,
-                ...safeFUser
+            // Normalize Firestore Timestamps to ISO strings (A09)
+            const normalizeDate = (val: any) => {
+                if (!val) return null;
+                if (val.toDate) return val.toDate().toISOString();
+                if (val._seconds) return new Date(val._seconds * 1000).toISOString();
+                return val;
             };
-        });
+
+            return {
+                ...safeFUser,
+                uid: userRecord.uid,
+                Email: userRecord.email || fUser.Email || '',
+                UserName: userRecord.displayName || fUser.UserName || 'System User',
+                Role: fUser.Role || 'Administrator',
+                IsActive: fUser.IsActive !== undefined ? fUser.IsActive : !userRecord.disabled,
+                CreatedAt: normalizeDate(fUser.CreatedAt) || userRecord.metadata.creationTime,
+                UpdatedAt: normalizeDate(fUser.UpdatedAt) || userRecord.metadata.lastSignInTime,
+                _existsInFirestore: !!fUser.id // Flag to indicate it has a profile
+            };
+        }).filter((u: any) => u.Email && u._existsInFirestore); // Only show users with a registered profile
 
         return NextResponse.json({ success: true, data: mergedUsers });
     } catch (error: any) {

@@ -26,7 +26,7 @@ const AdminLogin = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const trimmedEmail = email.trim().toLowerCase();
-    const trimmedPassword = password.trim();
+    const trimmedPassword = password; // Do not trim passwords as spaces are valid
     setLoading(true);
 
     try {
@@ -50,6 +50,9 @@ const AdminLogin = () => {
 
       if (err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
         errorMessage = 'Invalid email or password. Please check your credentials and try again.';
+      } else if (err.code === 'auth/user-disabled') {
+        errorMessage = 'This account has been deactivated. Please contact your system administrator.';
+        errorTitle = 'Account Disabled';
       } else if (err.code === 'auth/too-many-requests') {
         errorMessage = 'Too many failed login attempts. Please try again later.';
         errorTitle = 'Account Locked';
