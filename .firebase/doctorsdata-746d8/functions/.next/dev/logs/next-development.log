@@ -1,5 +1,0 @@
-[00:00:01.935] Server  WARN    ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
-[00:00:02.312] Server  LOG     ✓ Ready in 1748ms
-[00:00:17.426] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:17.718] Browser LOG     Auth state changed: No user
-[00:00:17.718] Browser LOG     Auth loading finished

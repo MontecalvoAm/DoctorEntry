@@ -704,13 +704,15 @@ const AdminDashboard = () => {
         </div>
 
         <nav className={styles.sidebarNav}>
-          <button
-            className={`${styles.navItem} ${activeTab === 'doctors' ? styles.active : ''}`}
-            onClick={() => { setActiveTab('doctors'); setIsMobileMenuOpen(false); }}
-          >
-            <Users size={20} />
-            <span>Doctors List</span>
-          </button>
+          {!isDoctor && (
+            <button
+              className={`${styles.navItem} ${activeTab === 'doctors' ? styles.active : ''}`}
+              onClick={() => { setActiveTab('doctors'); setIsMobileMenuOpen(false); }}
+            >
+              <Users size={20} />
+              <span>Doctors List</span>
+            </button>
+          )}
 
           {isAdministrator && (
             <button
@@ -783,35 +785,37 @@ const AdminDashboard = () => {
 
         <div className={styles.contentArea}>
           {/* Stats Cards */}
-          <div className={styles.statsGrid}>
-            <div className={styles.statCard}>
-              <div className={styles.statIcon} style={{ background: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6' }}>
-                <Users size={24} />
+          {!isDoctor && (
+            <div className={styles.statsGrid}>
+              <div className={styles.statCard}>
+                <div className={styles.statIcon} style={{ background: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6' }}>
+                  <Users size={24} />
+                </div>
+                <div className={styles.statInfo}>
+                  <h3>Total {activeTab === 'doctors' ? 'Doctors' : 'Users'}</h3>
+                  <p>{activeTab === 'doctors' ? doctors.length : users.length}</p>
+                </div>
               </div>
-              <div className={styles.statInfo}>
-                <h3>Total {activeTab === 'doctors' ? 'Doctors' : 'Users'}</h3>
-                <p>{activeTab === 'doctors' ? doctors.length : users.length}</p>
+              <div className={styles.statCard}>
+                <div className={styles.statIcon} style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#10b981' }}>
+                  <Calendar size={24} />
+                </div>
+                <div className={styles.statInfo}>
+                  <h3>Total Active</h3>
+                  <p>{totalActive}</p>
+                </div>
+              </div>
+              <div className={styles.statCard}>
+                <div className={styles.statIcon} style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444' }}>
+                  <AlertCircle size={24} />
+                </div>
+                <div className={styles.statInfo}>
+                  <h3>Total Inactive</h3>
+                  <p>{totalInactive}</p>
+                </div>
               </div>
             </div>
-            <div className={styles.statCard}>
-              <div className={styles.statIcon} style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#10b981' }}>
-                <Calendar size={24} />
-              </div>
-              <div className={styles.statInfo}>
-                <h3>Total Active</h3>
-                <p>{totalActive}</p>
-              </div>
-            </div>
-            <div className={styles.statCard}>
-              <div className={styles.statIcon} style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444' }}>
-                <AlertCircle size={24} />
-              </div>
-              <div className={styles.statInfo}>
-                <h3>Total Inactive</h3>
-                <p>{totalInactive}</p>
-              </div>
-            </div>
-          </div>
+          )}
 
           {error && (
             <div className={styles.errorBox}>

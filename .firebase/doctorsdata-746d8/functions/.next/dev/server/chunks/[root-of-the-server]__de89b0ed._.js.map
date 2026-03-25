@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 40, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/FRANCIE%20SIOCO/Aljon/Vismed/DoctorsDataEntry/src/app/api/auth/logout/route.ts"],"sourcesContent":["import { cookies } from 'next/headers';\r\nimport { NextResponse } from 'next/server';\r\n\r\nexport async function POST() {\r\n    try {\r\n        const cookieStore = await cookies();\r\n        cookieStore.delete('session');\r\n        return NextResponse.json({ success: true });\r\n    } catch (error) {\r\n        console.error('Logout error:', error);\r\n        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });\r\n    }\r\n}\r\n"],"names":[],"mappings":";;;;AAAA;AACA;;;AAEO,eAAe;IAClB,IAAI;QACA,MAAM,cAAc,MAAM,IAAA,4IAAO;QACjC,YAAY,MAAM,CAAC;QACnB,OAAO,gJAAY,CAAC,IAAI,CAAC;YAAE,SAAS;QAAK;IAC7C,EAAE,OAAO,OAAO;QACZ,QAAQ,KAAK,CAAC,iBAAiB;QAC/B,OAAO,gJAAY,CAAC,IAAI,CAAC;YAAE,OAAO;QAAwB,GAAG;YAAE,QAAQ;QAAI;IAC/E;AACJ"}}]
-}
