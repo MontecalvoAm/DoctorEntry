@@ -140,7 +140,7 @@ export async function POST(request: Request) {
             displayName: UserName,
         });
 
-        await adminDb.collection('M_Users').doc(userRecord.uid).set({
+        const userData: any = {
             UserName,
             Email: Email.toLowerCase(),
             Role,
@@ -148,7 +148,9 @@ export async function POST(request: Request) {
             CreatedAt: admin.firestore.FieldValue.serverTimestamp(),
             UpdatedAt: admin.firestore.FieldValue.serverTimestamp(),
             CreatedBy: decodedToken?.email || 'Admin',
-        });
+        };
+
+        await adminDb.collection('M_Users').doc(userRecord.uid).set(userData);
 
         await setCustomUserClaims(userRecord.uid, Role);
 
