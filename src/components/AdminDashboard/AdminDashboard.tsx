@@ -46,6 +46,10 @@ interface Doctor {
   phicNo?: string;
   birTan?: string;
   contactNo?: string;
+  prcNumber: string;
+  prcExpiration: string;
+  s2License?: string;
+  s2Expiration?: string;
   privacyAccepted?: boolean;
   CreatedAt: any;
   CreatedBy: string;
@@ -429,6 +433,10 @@ const AdminDashboard = () => {
         { header: 'Contact No', key: 'contactNo', width: 18 },
         { header: 'PHIC No', key: 'phicNo', width: 18 },
         { header: 'BIR TAN', key: 'birTan', width: 18 },
+        { header: 'PRC No', key: 'prcNumber', width: 18 },
+        { header: 'PRC Expiration', key: 'prcExpiration', width: 18 },
+        { header: 'S2 License', key: 's2License', width: 18 },
+        { header: 'S2 Expiration', key: 's2Expiration', width: 18 },
         { header: 'Status', key: 'status', width: 15 },
         { header: 'Registered Date', key: 'registeredDate', width: 25 }
       ];
@@ -472,6 +480,10 @@ const AdminDashboard = () => {
           contactNo: doc.contactNo || 'N/A',
           phicNo: doc.phicNo || 'N/A',
           birTan: doc.birTan || 'N/A',
+          prcNumber: doc.prcNumber || 'N/A',
+          prcExpiration: doc.prcExpiration || 'N/A',
+          s2License: doc.s2License || 'N/A',
+          s2Expiration: doc.s2Expiration || 'N/A',
           status: doc.IsActive !== false ? 'Active' : 'Inactive',
           registeredDate: formatDate(doc.CreatedAt)
         });

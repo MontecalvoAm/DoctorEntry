@@ -36,6 +36,10 @@ const DataEntryForm: React.FC<DataEntryFormProps> = ({
     birTan: initialData?.birTan || '',
     contactNo: initialData?.contactNo || '',
     email: initialData?.email || '',
+    prcNumber: initialData?.prcNumber || '',
+    prcExpiration: initialData?.prcExpiration || '',
+    s2License: initialData?.s2License || '',
+    s2Expiration: initialData?.s2Expiration || '',
     privacyAccepted: mode !== 'create', // Assume accepted if editing/viewing
   });
 
@@ -86,13 +90,31 @@ const DataEntryForm: React.FC<DataEntryFormProps> = ({
 
   const validateForm = () => {
     const errors: Record<string, boolean> = {};
-    const requiredFields = ['surname', 'givenName', 'specialty', 'contactNo', 'email'];
+    const requiredFields = ['surname', 'givenName', 'specialty', 'contactNo', 'email', 'prcNumber', 'prcExpiration'];
 
     requiredFields.forEach(field => {
       if (!formData[field as keyof typeof formData]) {
         errors[field] = true;
       }
     });
+
+    // PRC Expiration Date Validation
+    if (formData.prcExpiration) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const expirationDate = new Date(formData.prcExpiration);
+      if (expirationDate < today) {
+        errors.prcExpiration = true;
+        setStatusModal({
+          isOpen: true,
+          type: 'error',
+          title: 'License Expired',
+          message: 'The PRC Expiration Date cannot be in the past. Please provide a valid, current expiration date.'
+        });
+        setFieldErrors(errors);
+        return false;
+      }
+    }
 
     setFieldErrors(errors);
     return Object.keys(errors).length === 0;
@@ -224,6 +246,10 @@ const DataEntryForm: React.FC<DataEntryFormProps> = ({
             birTan: '',
             contactNo: '',
             email: '',
+            prcNumber: '',
+            prcExpiration: '',
+            s2License: '',
+            s2Expiration: '',
             privacyAccepted: false,
           });
           setFieldErrors({});
@@ -400,6 +426,67 @@ const DataEntryForm: React.FC<DataEntryFormProps> = ({
         </div>
 
         <div className={styles.sectionHeader}>Regulatory Information</div>
+        <div className={styles.row}>
+          <div className={styles.field}>
+            <label htmlFor="prcNumber">PRC NUMBER<span className={styles.required}>*</span></label>
+            <input
+              type="text"
+              id="prcNumber"
+              name="prcNumber"
+              value={formData.prcNumber}
+              onChange={handleChange}
+              placeholder="Enter PRC Number"
+              className={fieldErrors.prcNumber ? styles.invalid : ''}
+              readOnly={mode === 'view'}
+              suppressHydrationWarning
+            />
+            {fieldErrors.prcNumber && <span className={styles.fieldErrorMessage}>This is a required field</span>}
+          </div>
+          <div className={styles.field}>
+            <label htmlFor="prcExpiration">PRC EXPIRATION DATE<span className={styles.required}>*</span></label>
+            <input
+              type="date"
+              id="prcExpiration"
+              name="prcExpiration"
+              value={formData.prcExpiration}
+              onChange={handleChange}
+              className={fieldErrors.prcExpiration ? styles.invalid : ''}
+              readOnly={mode === 'view'}
+              suppressHydrationWarning
+            />
+            {fieldErrors.prcExpiration && <span className={styles.fieldErrorMessage}>This is a required field</span>}
+          </div>
+        </div>
+
+        <div className={styles.row}>
+          <div className={styles.field}>
+            <label htmlFor="s2License">S2 LICENSE # (OPTIONAL)</label>
+            <input
+              type="text"
+              id="s2License"
+              name="s2License"
+              value={formData.s2License}
+              onChange={handleChange}
+              placeholder="Enter S2 License Number"
+              readOnly={mode === 'view'}
+              suppressHydrationWarning
+            />
+          </div>
+          <div className={styles.field}>
+            <label htmlFor="s2Expiration">S2 EXPIRATION DATE (OPTIONAL)</label>
+            <input
+              type="date"
+              id="s2Expiration"
+              name="s2Expiration"
+              value={formData.s2Expiration}
+              onChange={handleChange}
+              readOnly={mode === 'view'}
+              suppressHydrationWarning
+            />
+          </div>
+        </div>
+
+        <div className={styles.sectionHeader}>Billing & Tax Information</div>
         <div className={styles.row}>
           <div className={styles.field}>
             <label htmlFor="phicNo">PHIC(PMA) NO.</label>

@@ -17,6 +17,10 @@ const DoctorSchema = z.object({
     phicNo: z.string().optional(),
     birTan: z.string().optional(),
     contactNo: z.string().optional(),
+    prcNumber: z.string().min(1), // Mandatory (A03)
+    prcExpiration: z.string().min(1), // Mandatory (A03)
+    s2License: z.string().optional(),
+    s2Expiration: z.string().optional(),
     captchaToken: z.string(), // Required for 10/10
 });
 
@@ -31,6 +35,10 @@ const DoctorUpdateSchema = z.object({
     phicNo: z.string().optional(),
     birTan: z.string().optional(),
     contactNo: z.string().optional(),
+    prcNumber: z.string().min(1).optional(),
+    prcExpiration: z.string().min(1).optional(),
+    s2License: z.string().optional(),
+    s2Expiration: z.string().optional(),
     IsActive: z.boolean().optional(),
 });
 
@@ -118,6 +126,17 @@ export async function POST(request: Request) {
         }
 
         const data = validatedData.data;
+
+        // PRC Expiration Date Validation
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const prcExp = new Date(data.prcExpiration);
+        if (prcExp < today) {
+            return NextResponse.json({ 
+                success: false, 
+                error: 'The PRC Expiration Date cannot be in the past. Please provide a valid, current expiration date.' 
+            }, { status: 400 });
+        }
 
         // 2. CAPTCHA Verification (A04)
         const recaptcha = await verifyRecaptcha(data.captchaToken);
@@ -240,6 +259,19 @@ export async function PATCH(request: Request) {
         }
 
         const { id, ...updateData } = validatedData.data;
+
+        // PRC Expiration Date Validation
+        if (updateData.prcExpiration) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const prcExp = new Date(updateData.prcExpiration);
+            if (prcExp < today) {
+                return NextResponse.json({ 
+                    success: false, 
+                    error: 'The PRC Expiration Date cannot be in the past. Please provide a valid, current expiration date.' 
+                }, { status: 400 });
+            }
+        }
 
         if (!id) {
             return NextResponse.json({ success: false, error: 'Doctor ID is required' }, { status: 400 });
