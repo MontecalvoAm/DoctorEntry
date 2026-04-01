@@ -131,7 +131,7 @@
 .field label {
   font-size: 0.85rem;
   font-weight: 700;
-  color: var(--text-dark);
+  color: var(--text-primary);
   letter-spacing: 0.5px;
 }
 
@@ -147,7 +147,7 @@
   font-size: 1rem;
   transition: all 0.3s ease;
   background-color: var(--white);
-  color: var(--text-dark);
+  color: var(--text-primary);
 }
 
 .field input:focus {
@@ -170,11 +170,11 @@
 }
 
 .privacySection {
-  background: #f9fafb;
+  background: rgba(65, 107, 169, 0.04);
   padding: 24px;
   border-radius: var(--radius-md);
   margin-top: 16px;
-  border: 1px solid #f1f5f9;
+  border: 1.5px solid rgba(65, 107, 169, 0.15);
 }
 
 .checkboxWrapper {
@@ -195,7 +195,7 @@
 .checkboxLabel {
   font-size: 0.9rem;
   line-height: 1.6;
-  color: var(--text-dark);
+  color: var(--text-primary);
 }
 
 .invalidCheckbox {
